@@ -1,11 +1,11 @@
-from app.schemas.ticket import TicketCreate
+from app.schemas.ticket import TicketCreate, TicketRead
 from app.models.ticket import Ticket
 from fastapi import APIRouter
 from app.database import SessionLocal
 
-router = APIRouter()
+ticket_router = APIRouter()
 
-@router.post("/tickets/")
+@ticket_router.post("/tickets/")
 async def create_ticket(ticket: TicketCreate):
     try:
         db_session = SessionLocal()
@@ -23,4 +23,16 @@ async def create_ticket(ticket: TicketCreate):
     return {
         "message": "Ticket received",
         "ticket": ticket_entry
+    }
+
+@ticket_router.get("/tickets/")
+async def get_tickets():
+    try:
+        db_session = SessionLocal()
+        tickets_table = db_session.query(Ticket).all()
+    finally:
+        db_session.close()
+    return {
+        "message": "Querying all tickets",
+        "tickets": tickets_table
     }

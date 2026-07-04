@@ -1,7 +1,6 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 from app.database import Base, engine
-from app.models import checkout, device, ticket
-from app.routers.tickets import router
+from app.routers.tickets import ticket_router
 
 # Create database & tables
 Base.metadata.create_all(bind=engine)
@@ -9,8 +8,10 @@ Base.metadata.create_all(bind=engine)
 # Start web server
 app = FastAPI()
 
-app.include_router(router)
+# Use grouped endpoints
+app.include_router(ticket_router)
 
+# Create basic GET endpoints
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
