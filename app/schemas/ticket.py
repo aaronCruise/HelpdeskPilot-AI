@@ -1,10 +1,10 @@
-from sqlalchemy import DateTime
+from datetime import datetime
 from pydantic import BaseModel, field_validator
 
 class TicketCreate(BaseModel):
     requester_name: str
     requester_email: str
-    request_text: str
+    text: str
 
     @field_validator('requester_name')
     def validate_name(cls, name):
@@ -20,7 +20,7 @@ class TicketCreate(BaseModel):
             raise ValueError('Email must be a valid email.')
         return email
 
-    @field_validator('request_text')
+    @field_validator('text')
     def validate_text(cls, text):
         if not text:
             raise ValueError('Request text must be populated.')
@@ -32,12 +32,12 @@ class TicketRead(BaseModel):
     requester_name: str
     requester_email: str
     text: str
-    category: enumerate
-    priority: enumerate
-    status: enumerate
-    created_at: DateTime
-    updated_at: DateTime
+    category: str
+    priority: str
+    status: str
+    created_at: datetime
+    updated_at: datetime
 
 class TicketUpdate(BaseModel):
-    status: enumerate
-    priority: enumerate
+    status: str
+    priority: str
