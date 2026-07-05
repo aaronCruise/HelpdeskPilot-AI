@@ -2,7 +2,7 @@
 from sqlalchemy import Column, DateTime, ForeignKey, String, Integer
 from app.database import Base
 
-class Device(Base):
+class Checkout(Base):
     __tablename__ = 'checkouts'
 
     cid = Column(Integer, primary_key=True, index=True)

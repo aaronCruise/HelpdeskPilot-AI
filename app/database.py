@@ -1,3 +1,4 @@
+# Configures SQLAlchemy and database variables
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from pathlib import Path

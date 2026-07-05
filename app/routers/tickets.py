@@ -36,3 +36,19 @@ async def get_tickets():
         "message": "Querying all tickets",
         "tickets": tickets_table
     }
+
+@ticket_router.get("/tickets/{tid}")
+async def get_ticket_by_id(tid: int):
+    try:
+        db_session = SessionLocal()
+        requested_ticket = db_session.query(Ticket).get(tid)
+        if not requested_ticket:
+            return {
+                "message": "Error: ticket does not exist."
+            }
+    finally:
+        db_session.close()
+    return {
+        "message": "Getting requested ticket",
+        "ticket": requested_ticket
+    }

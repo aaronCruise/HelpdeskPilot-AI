@@ -8,10 +8,10 @@ Base.metadata.create_all(bind=engine)
 # Start web server
 app = FastAPI()
 
-# Use grouped endpoints
+# Mount routers
 app.include_router(ticket_router)
 
-# Create basic GET endpoints
+# Expose basic endpoints
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
