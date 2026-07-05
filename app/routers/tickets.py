@@ -1,6 +1,6 @@
-from app.schemas.ticket import TicketCreate, TicketRead
+from app.schemas.ticket import TicketCreate, TicketRead, TicketUpdate
 from app.models.ticket import Ticket
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from app.database import SessionLocal
 
 ticket_router = APIRouter()
@@ -37,18 +37,34 @@ async def get_tickets():
         "tickets": tickets_table
     }
 
-@ticket_router.get("/tickets/{tid}")
+@ticket_router.get("/tickets/{tid}", response_model=TicketRead)
 async def get_ticket_by_id(tid: int):
     try:
         db_session = SessionLocal()
         requested_ticket = db_session.query(Ticket).get(tid)
         if not requested_ticket:
-            return {
-                "message": "Error: ticket does not exist."
-            }
+            raise HTTPException(
+                status_code=404,
+                detail="Ticket not found"
+            )
     finally:
         db_session.close()
-    return {
-        "message": "Getting requested ticket",
-        "ticket": requested_ticket
-    }
+    return requested_ticket
+
+@ticket_router.patch("/tickets/{tid}", response_model=TicketUpdate)
+async def patch_ticket(tid: int, updates: TicketUpdate):
+    try:
+        db_session = SessionLocal()
+        requested_ticket = db_session.query(Ticket).get(tid)
+        if not requested_ticket:
+            raise HTTPException(
+                status_code=404,
+                detail="Ticket not found"
+            )
+        setattr(requested_ticket, 'status', updates.status)
+        setattr(requested_ticket, 'priority', updates.priority)
+        db_session.commit()
+        db_session.refresh(requested_ticket)
+    finally:
+        db_session.close()
+    return requested_ticket
