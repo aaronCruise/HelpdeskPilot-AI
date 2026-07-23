@@ -41,7 +41,7 @@ async def get_devices():
 async def get_device_by_id(did: int):
     try:
         db_session = SessionLocal()
-        requested_device = db_session.query(Device).get(did)
+        requested_device = db_session.get(Device, did)
         if not requested_device:
             raise HTTPException(
                 status_code=404,
@@ -55,7 +55,7 @@ async def get_device_by_id(did: int):
 async def patch_device(did: int, updates: DeviceUpdate):
     try:
         db_session = SessionLocal()
-        requested_device = db_session.query(Device).get(did)
+        requested_device = db_session.get(Device, did)
         if not requested_device:
             raise HTTPException(
                 status_code=404,

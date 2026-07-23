@@ -41,7 +41,7 @@ async def get_tickets():
 async def get_ticket_by_id(tid: int):
     try:
         db_session = SessionLocal()
-        requested_ticket = db_session.query(Ticket).get(tid)
+        requested_ticket = db_session.get(Ticket, tid)
         if not requested_ticket:
             raise HTTPException(
                 status_code=404,
@@ -55,7 +55,7 @@ async def get_ticket_by_id(tid: int):
 async def patch_ticket(tid: int, updates: TicketUpdate):
     try:
         db_session = SessionLocal()
-        requested_ticket = db_session.query(Ticket).get(tid)
+        requested_ticket = db_session.get(Ticket, tid)
         if not requested_ticket:
             raise HTTPException(
                 status_code=404,

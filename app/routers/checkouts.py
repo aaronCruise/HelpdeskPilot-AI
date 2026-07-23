@@ -16,7 +16,7 @@ async def create_checkout(checkout: CheckoutCreate):
                 status_code=401,
                 detail="Device is not available"
             )
-        requested_device = db_session.query(Device).get(checkout.device_id)
+        requested_device = db_session.get(Device, checkout.device_id)
         setattr(requested_device, 'state', 'checked_out')
         checkout_entry = Checkout(  
             device_id = checkout.device_id,
@@ -40,13 +40,13 @@ async def create_checkout(checkout: CheckoutCreate):
 async def check_in(check_in: CheckIn):
     try:
         db_session = SessionLocal()
-        requested_checkout = db_session.query(Checkout).get(check_in.cid)
+        requested_checkout = db_session.get(Checkout, check_in.cid)
         if not requested_checkout:
             raise HTTPException(
                 status_code=404,
                 detail="Checkout not found"
             )
-        requested_device = db_session.query(Device).get(requested_checkout.device_id)
+        requested_device = db_session.get(Device, requested_checkout.device_id)
         if requested_device:
             setattr(requested_device, 'state', 'available')
         setattr(requested_checkout, 'status', 'returned')
@@ -87,7 +87,7 @@ async def get_active_checkouts():
 async def get_checkout_by_id(cid: int):
     try:
         db_session = SessionLocal()
-        requested_checkout = db_session.query(Checkout).get(cid)
+        requested_checkout = db_session.get(Checkout, cid)
         if not requested_checkout:
             raise HTTPException(
                 status_code=404,
@@ -101,7 +101,7 @@ async def get_checkout_by_id(cid: int):
 async def patch_checkout(cid: int, updates: CheckoutUpdate):
     try:
         db_session = SessionLocal()
-        requested_checkout = db_session.query(Checkout).get(cid)
+        requested_checkout = db_session.get(Checkout, cid)
         if not requested_checkout:
             raise HTTPException(
                 status_code=404,
