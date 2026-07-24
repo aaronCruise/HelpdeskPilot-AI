@@ -1,5 +1,6 @@
 from app.schemas.ticket import TicketCreate, TicketRead, TicketUpdate
 from app.models.ticket import Ticket
+from app.services.classification_service import classify_ticket
 from fastapi import APIRouter, HTTPException
 from app.database import SessionLocal
 
@@ -7,12 +8,16 @@ ticket_router = APIRouter()
 
 @ticket_router.post("/tickets/")
 async def create_ticket(ticket: TicketCreate):
+    classification = classify_ticket(ticket.text)
+    
     try:
         db_session = SessionLocal()
         ticket_entry = Ticket(  
             requester_name = ticket.requester_name,
             requester_email = ticket.requester_email,
-            text = ticket.text
+            text = ticket.text,
+            category = classification['category'],
+            priority = classification['priority']
         )
         db_session.add(ticket_entry)
         db_session.commit()
