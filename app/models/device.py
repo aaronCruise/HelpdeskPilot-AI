@@ -9,9 +9,9 @@ STATES = ['checked_out', 'available', 'maintenance', 'retired']
 class Device(Base):
     __tablename__ = 'devices'
 
-    did = Column(Integer, primary_key=True, index=True)
-    asset_tag = Column(String, index=True)
-    name = Column(String, index=True)
+    did = Column(Integer, primary_key=True)
+    asset_tag = Column(String, index=True, unique=True)
+    name = Column(String)
     type = Column(Enum(*TYPES))
     state = Column(Enum(*STATES), default='available')
     created_at = Column(DateTime, index=True, default=datetime.now())

@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, field_validator
+from app.models.ticket import CATEGORIES, PRIORITIES, STATUSES
 
 class TicketCreate(BaseModel):
     requester_name: str
@@ -32,12 +33,12 @@ class TicketRead(BaseModel):
     requester_name: str
     requester_email: str
     text: str
-    category: str
-    priority: str
-    status: str
+    category: CATEGORIES
+    priority: PRIORITIES
+    status: STATUSES
     created_at: datetime
     updated_at: datetime
 
 class TicketUpdate(BaseModel):
-    status: str
-    priority: str
+    status: STATUSES
+    priority: PRIORITIES

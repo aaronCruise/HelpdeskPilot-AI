@@ -29,12 +29,12 @@ class STATUSES(str, Enum):
 class Ticket(Base):
     __tablename__ = 'tickets'
 
-    tid = Column(Integer, primary_key=True, index=True)
-    requester_name = Column(String, index=True)
+    tid = Column(Integer, primary_key=True)
+    requester_name = Column(String)
     requester_email = Column(String, index=True)
-    text = Column(String, index=True)
+    text = Column(String)
     category = Column(SQLEnum(CATEGORIES), index=True, default=CATEGORIES.GENERAL)
     priority = Column(SQLEnum(PRIORITIES), index=True, default=PRIORITIES.MEDIUM)
     status = Column(SQLEnum(STATUSES), index=True, default=STATUSES.NEW)
     created_at = Column(DateTime, index=True, default=datetime.now())
-    updated_at = Column(DateTime, index=True, default=datetime.now(), onupdate=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())

@@ -12,9 +12,9 @@ class STATUSES(str, Enum):
 class Checkout(Base):
     __tablename__ = 'checkouts'
 
-    cid = Column(Integer, primary_key=True, index=True)
-    device_id = Column(Integer, ForeignKey('devices.did'), nullable=False)
-    borrower_name = Column(String, index=True)
+    cid = Column(Integer, primary_key=True)
+    device_id = Column(Integer, ForeignKey('devices.did'), nullable=False, index=True)
+    borrower_name = Column(String)
     borrower_email = Column(String, index=True)
     from_date = Column(DateTime, index=True)
     to_date = Column(DateTime, index=True)
