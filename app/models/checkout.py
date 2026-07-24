@@ -1,8 +1,13 @@
 # Define the checkout model
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, String, Integer
+from enum import Enum
+from sqlalchemy import Column, DateTime, Enum as SQLEnum, ForeignKey, String, Integer
 from app.database import Base
 
-STATUSES = ['active', 'returned', 'overdue', 'cancelled']
+class STATUSES(str, Enum):
+    ACTIVE = 'active'
+    RETURNED = 'returned'
+    OVERDUE = 'overdue'
+    CANCELLED = 'cancelled'
 
 class Checkout(Base):
     __tablename__ = 'checkouts'
@@ -13,4 +18,4 @@ class Checkout(Base):
     borrower_email = Column(String, index=True)
     from_date = Column(DateTime, index=True)
     to_date = Column(DateTime, index=True)
-    status = Column(Enum(*STATUSES), default='active')
+    status = Column(SQLEnum(STATUSES), default=STATUSES.ACTIVE)

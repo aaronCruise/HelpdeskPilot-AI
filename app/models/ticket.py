@@ -1,11 +1,30 @@
 # Define the Ticket model
-from sqlalchemy import Column, DateTime, Enum, Integer, String
+from enum import Enum
+from sqlalchemy import Column, DateTime, Enum as SQLEnum, Integer, String
 from datetime import datetime
 from app.database import Base
 
-CATEGORIES = ['general', 'billing', 'technical']
-PRIORITIES = ['low', 'medium', 'high']
-STATUSES = ['new', 'in_progress', 'resolved', 'closed']
+class CATEGORIES(str, Enum):
+    GENERAL = 'general'
+    BILLING = 'billing'
+    TECHNICAL = 'technical'
+    HARDWARE = 'hardware'
+    SOFTWARE = 'software'
+    ACCOUNT = 'account'
+    NETWORK = 'network'
+    CLASSROOM = 'classroom'
+    CHECKOUT = 'checkout'
+
+class PRIORITIES(str, Enum):
+    LOW = 'low'
+    MEDIUM = 'medium'
+    HIGH = 'high'
+
+class STATUSES(str, Enum):
+    NEW = 'new'
+    IN_PROGRESS = 'in_progress'
+    RESOLVED = 'resolved'
+    CLOSED = 'closed'
 
 class Ticket(Base):
     __tablename__ = 'tickets'
@@ -14,8 +33,8 @@ class Ticket(Base):
     requester_name = Column(String, index=True)
     requester_email = Column(String, index=True)
     text = Column(String, index=True)
-    category = Column(Enum(*CATEGORIES), index=True, default='general')
-    priority = Column(Enum(*PRIORITIES), index=True, default='medium')
-    status = Column(Enum(*STATUSES), index=True, default='new')
+    category = Column(SQLEnum(CATEGORIES), index=True, default=CATEGORIES.GENERAL)
+    priority = Column(SQLEnum(PRIORITIES), index=True, default=PRIORITIES.MEDIUM)
+    status = Column(SQLEnum(STATUSES), index=True, default=STATUSES.NEW)
     created_at = Column(DateTime, index=True, default=datetime.now())
     updated_at = Column(DateTime, index=True, default=datetime.now(), onupdate=datetime.now())
