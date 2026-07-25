@@ -9,7 +9,7 @@ A work in progress!
 1. Backend: Python / FastAPI
 2. Database: SQLite
 3. RAG: ChromaDB
-4. LLM API: Ollama
+4. LLM API: Google Gemini
 5. Frontend: React
 6. Testing: pytest
 

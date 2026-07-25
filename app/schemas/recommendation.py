@@ -25,7 +25,7 @@ class RecommendationCreate(BaseModel):
             raise ValueError('Summary must be populated.')
         return summary
 
-    @field_validator('text')
+    @field_validator('recommended_step')
     def validate_recommended_step(cls, recommended_step):
         if not recommended_step:
             raise ValueError('Recommended step must be populated.')
