@@ -3,6 +3,10 @@ from app.database import Base, engine
 from app.routers.tickets import ticket_router
 from app.routers.devices import device_router
 from app.routers.checkouts import checkout_router
+import app.models.ticket
+import app.models.device
+import app.models.checkout
+import app.models.recommendation
 
 # Create database & tables
 Base.metadata.create_all(bind=engine)

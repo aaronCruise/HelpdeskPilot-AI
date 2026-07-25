@@ -1,6 +1,8 @@
 from app.schemas.ticket import TicketCreate, TicketRead, TicketUpdate
 from app.models.ticket import Ticket
 from app.services.classification_service import classify_ticket
+from app.services.llm_service import llm_analyze_ticket
+from app.schemas.recommendation import RecommendationCreate
 from fastapi import APIRouter, HTTPException
 from app.database import SessionLocal
 
@@ -73,3 +75,22 @@ async def patch_ticket(tid: int, updates: TicketUpdate):
     finally:
         db_session.close()
     return requested_ticket
+
+@ticket_router.post("/tickets/{tid}/analyze", response_model=RecommendationCreate)
+async def analyze_ticket(tid: int):
+    try:
+        db_session = SessionLocal()
+        requested_ticket = db_session.get(Ticket, tid)
+        if not requested_ticket:
+            raise HTTPException(
+                status_code=404,
+                detail="Ticket not found"
+            )
+        recommendation_entry = llm_analyze_ticket(requested_ticket)
+
+        db_session.add(recommendation_entry)
+        db_session.commit()
+        db_session.refresh(recommendation_entry)
+    finally:
+        db_session.close()
+    return recommendation_entry
