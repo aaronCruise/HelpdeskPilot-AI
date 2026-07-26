@@ -7,15 +7,16 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 from app.database import Base, engine
+from app.models.ticket import CATEGORIES, PRIORITIES, STATUSES
 
 client = TestClient(app)
 
 # Helper function for each test case
-def create_test_ticket(client):
+def create_test_ticket(client, custom_text="This is a test ticket for the test_ticket suite."):
     payload = {
         "requester_name": "Test Name",
         "requester_email": "test@domain.com",
-        "text": "This is a test ticket for the test_ticket suite."
+        "text": custom_text
     }
 
     response = client.post("/tickets/", json=payload)
@@ -37,9 +38,9 @@ def test_create_ticket():
     assert ticket["requester_name"] == "Test Name"
     assert ticket["requester_email"] == "test@domain.com"
     assert ticket["text"] == "This is a test ticket for the test_ticket suite."
-    assert ticket["category"] == "general"
-    assert ticket["priority"] == "medium"
-    assert ticket["status"] == "new"
+    assert ticket["category"] == CATEGORIES.GENERAL 
+    assert ticket["priority"] == PRIORITIES.MEDIUM #default
+    assert ticket["status"] == STATUSES.NEW
     assert "created_at" in ticket # We can't assume the exact timestamp
 
 def test_create_ticket_validation():
@@ -92,20 +93,39 @@ def test_patch_ticket():
     tid = ticket["tid"]
 
     response = client.patch(f"/tickets/{tid}", json={
-        "status": "in_progress",
-        "priority": "high"})
+        "status": STATUSES.IN_PROGRESS,
+        "priority": PRIORITIES.HIGH})
     assert response.status_code == 200
 
     payload = response.json()
-    assert payload["status"] == "in_progress"
-    assert payload["priority"] == "high"
+    assert payload["status"] == STATUSES.IN_PROGRESS
+    assert payload["priority"] == PRIORITIES.HIGH
 
 def test_nonexistent_ticket_patch():
     ticket = create_test_ticket(client)["ticket"]
     nonexistent_tid = ticket["tid"] + 1000000
 
     response = client.patch(f"/tickets/{nonexistent_tid}", json={
-        "status": "in_progress",
-        "priority": "high"})
+        "status": STATUSES.IN_PROGRESS,
+        "priority": PRIORITIES.HIGH})
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Ticket not found"}
+
+def test_analyze_ticket():
+    ticket = create_test_ticket(client, custom_text="Please fix my wifi now.")["ticket"]
+    response = client.post(f"/tickets/{ticket['tid']}/analyze")
+    assert response.status_code == 200
+
+    payload = response.json()
+    assert payload["category"] == CATEGORIES.NETWORK
+    assert payload["priority"] == PRIORITIES.HIGH
+    assert "summary" in payload
+    assert "recommended_step" in payload
+    
+def test_nonexistent_ticket_analyze():
+    ticket = create_test_ticket(client)["ticket"]
+    nonexistent_tid = ticket["tid"] + 1000000
+
+    response = client.post(f"/tickets/{nonexistent_tid}/analyze")
     assert response.status_code == 404
     assert response.json() == {"detail": "Ticket not found"}
