@@ -4,11 +4,13 @@ from app.routers.tickets import ticket_router
 from app.routers.devices import device_router
 from app.routers.checkouts import checkout_router
 from dotenv import load_dotenv
-from app.services.docs_loader_service import load_documents
+from pathlib import Path
 import app.models.ticket
 import app.models.device
 import app.models.checkout
 import app.models.recommendation
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
 
 # Load LLM API key into environment
 load_dotenv()
@@ -18,9 +20,6 @@ Base.metadata.create_all(bind=engine)
 
 # Start web server
 app = FastAPI()
-
-# Load knowledge base documents
-DOCUMENTS = load_documents()
 
 # Mount routers
 app.include_router(ticket_router)
