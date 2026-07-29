@@ -1,10 +1,7 @@
 # Configures SQLAlchemy and database variables
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
-from pathlib import Path
-
-DB_DIR = Path(__file__).resolve().parent.parent
-DB_FILE = DB_DIR / 'hdpilot.db'
+from app.paths import DB_FILE
 
 engine = create_engine(
     f"sqlite:///{DB_FILE}",

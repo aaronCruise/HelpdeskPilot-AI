@@ -1,13 +1,13 @@
-from app.main import ROOT_DIR
-from chromadb import PersistentClient
+from app.paths import VECTOR_DB_FILE, KNOWLEDGE_BASE_DIR
+from app.models.ticket import Ticket
+from chromadb import Collection, PersistentClient
 from pathlib import Path
 
-VECTOR_DB_PATH = ROOT_DIR / 'knowledge_base.db'
-DOCS_DIR = ROOT_DIR / 'docs'
+NUM_RELEVANT_CHUNKS = 3
 
 def load_documents() -> list:
     documents = []
-    p = Path(DOCS_DIR)
+    p = Path(KNOWLEDGE_BASE_DIR)
 
     for file in p.iterdir():
         if not file.is_file():
@@ -46,7 +46,7 @@ def chunk_documents(documents) -> list:
 def create_collection():
     documents = load_documents()
     chunks = chunk_documents(documents)
-    chroma_client = PersistentClient(path=VECTOR_DB_PATH)
+    chroma_client = PersistentClient(path=VECTOR_DB_FILE)
     collection = chroma_client.get_or_create_collection(name="knowledge_base")
 
     ids = [
@@ -62,3 +62,10 @@ def create_collection():
         metadatas=metadatas
     )
     return collection
+
+def get_relevant_chunks(collection: Collection, ticket: Ticket) -> list:
+    results = collection.query(
+        query_texts=[ticket.text],
+        n_results=NUM_RELEVANT_CHUNKS
+    )
+    return results['documents']

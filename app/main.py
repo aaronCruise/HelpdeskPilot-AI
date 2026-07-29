@@ -4,13 +4,10 @@ from app.routers.tickets import ticket_router
 from app.routers.devices import device_router
 from app.routers.checkouts import checkout_router
 from dotenv import load_dotenv
-from pathlib import Path
 import app.models.ticket
 import app.models.device
 import app.models.checkout
 import app.models.recommendation
-
-ROOT_DIR = Path(__file__).resolve().parent.parent
 
 # Load LLM API key into environment
 load_dotenv()

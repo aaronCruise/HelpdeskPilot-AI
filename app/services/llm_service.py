@@ -15,7 +15,7 @@ SYSTEM_INSTRUCTIONS = (
     '{"category":"...","priority":"...","summary":"...","recommended_step":"..."}'
 )
 
-def llm_analyze_ticket(ticket: Ticket) -> RecommendationCreate:
+def llm_analyze_ticket(ticket: Ticket, relevant_chunks: list) -> RecommendationCreate:
     client = genai.Client()
 
     response = client.models.generate_content(
@@ -23,7 +23,8 @@ def llm_analyze_ticket(ticket: Ticket) -> RecommendationCreate:
         contents=(
             f"Ticket text: {ticket.text}\n"
             f"Initial category: {ticket.category}\n"
-            f"Initial priority: {ticket.priority}"
+            f"Initial priority: {ticket.priority}\n"
+            f"Relevant knowledge: {relevant_chunks}"
         ),
         config={
             "system_instruction": SYSTEM_INSTRUCTIONS,
@@ -31,6 +32,8 @@ def llm_analyze_ticket(ticket: Ticket) -> RecommendationCreate:
             "response_mime_type": "application/json",
         },
     )
+
+    print(response)
 
     if not response.text:
         raise ValueError("The model returned an empty response.")
