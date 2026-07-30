@@ -14,4 +14,4 @@ class Device(Base):
     name = Column(String)
     type = Column(Enum(*TYPES))
     state = Column(Enum(*STATES), default='available')
-    created_at = Column(DateTime, index=True, default=datetime.now())
+    created_at = Column(DateTime, index=True, default=datetime.now)

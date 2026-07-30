@@ -14,4 +14,4 @@ class Recommendation(Base):
     summary = Column(String)
     recommended_step = Column(String)
     model_name = Column(String)
-    created_at = Column(DateTime, index=True, default=datetime.now())
+    created_at = Column(DateTime, index=True, default=datetime.now)

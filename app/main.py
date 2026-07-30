@@ -3,6 +3,7 @@ from app.database import Base, engine
 from app.routers.tickets import ticket_router
 from app.routers.devices import device_router
 from app.routers.checkouts import checkout_router
+from app.services.rag_service import ingest_knowledge_base
 from dotenv import load_dotenv
 import app.models.ticket
 import app.models.device
@@ -14,6 +15,9 @@ load_dotenv()
 
 # Create database & tables
 Base.metadata.create_all(bind=engine)
+
+# Create RAG database
+ingest_knowledge_base()
 
 # Start web server
 app = FastAPI()

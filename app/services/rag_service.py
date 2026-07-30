@@ -5,6 +5,9 @@ from pathlib import Path
 
 NUM_RELEVANT_CHUNKS = 3
 
+chroma_client = PersistentClient(path=VECTOR_DB_FILE)
+collection = chroma_client.get_or_create_collection(name="knowledge_base")
+
 def load_documents() -> list:
     documents = []
     p = Path(KNOWLEDGE_BASE_DIR)
@@ -43,11 +46,9 @@ def chunk_documents(documents) -> list:
 
     return chunks
 
-def create_collection():
+def ingest_knowledge_base():
     documents = load_documents()
     chunks = chunk_documents(documents)
-    chroma_client = PersistentClient(path=VECTOR_DB_FILE)
-    collection = chroma_client.get_or_create_collection(name="knowledge_base")
 
     ids = [
         f'{chunk['metadata']['source'].removesuffix('.md')}_{chunk['metadata']['chunk_index']}' 
@@ -61,11 +62,15 @@ def create_collection():
         documents=documents,
         metadatas=metadatas
     )
-    return collection
 
-def get_relevant_chunks(collection: Collection, ticket: Ticket) -> list:
+def get_relevant_chunks(ticket: Ticket) -> list:
     results = collection.query(
-        query_texts=[ticket.text],
+        query_texts=[str(ticket.text)],
         n_results=NUM_RELEVANT_CHUNKS
     )
-    return results['documents']
+    relevant_chunks = results["documents"]
+
+    if not relevant_chunks:
+        return []
+
+    return relevant_chunks[0]

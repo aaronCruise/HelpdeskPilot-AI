@@ -4,7 +4,7 @@ from app.models.recommendation import Recommendation
 from app.services.classification_service import classify_ticket
 from app.services import llm_service
 from app.schemas.recommendation import RecommendationCreate
-from app.services.rag_service import create_collection, get_relevant_chunks
+from app.services.rag_service import get_relevant_chunks
 from fastapi import APIRouter, HTTPException
 from app.database import SessionLocal
 
@@ -90,8 +90,7 @@ async def analyze_ticket(tid: int):
             )
 
         # RAG
-        chroma_collection = create_collection()
-        relevant_chunks = get_relevant_chunks(chroma_collection, requested_ticket)
+        relevant_chunks = get_relevant_chunks(requested_ticket)
 
         recommendation_payload = llm_service.llm_analyze_ticket(requested_ticket, relevant_chunks)
         recommendation_entry = Recommendation(

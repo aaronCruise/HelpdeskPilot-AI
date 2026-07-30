@@ -36,5 +36,5 @@ class Ticket(Base):
     category = Column(SQLEnum(CATEGORIES), index=True, default=CATEGORIES.GENERAL)
     priority = Column(SQLEnum(PRIORITIES), index=True, default=PRIORITIES.MEDIUM)
     status = Column(SQLEnum(STATUSES), index=True, default=STATUSES.NEW)
-    created_at = Column(DateTime, index=True, default=datetime.now())
-    updated_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
+    created_at = Column(DateTime, index=True, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
