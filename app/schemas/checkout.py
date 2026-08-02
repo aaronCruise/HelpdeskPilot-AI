@@ -1,6 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel, field_validator, model_validator
 
+from app.models.checkout import STATUSES
+
+
 class CheckoutCreate(BaseModel):
     device_id: int
     borrower_name: str
@@ -53,12 +56,14 @@ class CheckoutRead(BaseModel):
     borrower_email: str
     from_date: datetime
     to_date: datetime
-    status: str
+    status: STATUSES
+
 
 class CheckoutUpdate(BaseModel):
     to_date: datetime
-    status: str
+    status: STATUSES
+
 
 class CheckIn(BaseModel):
     cid: int
-    status: str
+    status: STATUSES

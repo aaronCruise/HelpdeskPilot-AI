@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from app.schemas.checkout import CheckoutCreate, CheckoutRead, CheckoutUpdate, CheckIn
-from app.models.checkout import Checkout
-from app.models.device import Device
+from app.models.checkout import Checkout, STATUSES
+from app.models.device import Device, STATES
 from fastapi import APIRouter, HTTPException
 from app.database import SessionLocal
 
@@ -17,7 +17,7 @@ async def create_checkout(checkout: CheckoutCreate):
                 detail="Device is not available"
             )
         requested_device = db_session.get(Device, checkout.device_id)
-        setattr(requested_device, 'state', 'checked_out')
+        setattr(requested_device, 'state', STATES.CHECKED_OUT)
         checkout_entry = Checkout(  
             device_id = checkout.device_id,
             borrower_name = checkout.borrower_name,
@@ -48,8 +48,8 @@ async def check_in(check_in: CheckIn):
             )
         requested_device = db_session.get(Device, requested_checkout.device_id)
         if requested_device:
-            setattr(requested_device, 'state', 'available')
-        setattr(requested_checkout, 'status', 'returned')
+            setattr(requested_device, 'state', STATES.AVAILABLE)
+        setattr(requested_checkout, 'status', STATUSES.RETURNED)
         db_session.commit()
         db_session.refresh(requested_checkout)
     finally:
@@ -75,7 +75,7 @@ async def get_active_checkouts():
         active_checkouts_table =\
             db_session.\
                 query(Checkout).\
-                    where(Checkout.status == 'active').all()
+                    where(Checkout.status == STATUSES.ACTIVE).all()
     finally:
         db_session.close()
     return {
@@ -119,4 +119,4 @@ def is_device_available(device_id: int, db_session: Session) -> bool:
     requested_device = db_session.get(Device, device_id)
     if not requested_device:
         return False
-    return bool(requested_device.state == 'available')
+    return bool(requested_device.state == STATES.AVAILABLE)

@@ -1,6 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel, field_validator
 
+from app.models.device import STATES
+
+
 class DeviceCreate(BaseModel):
     asset_tag: str
     name: str
@@ -29,8 +32,9 @@ class DeviceRead(BaseModel):
     asset_tag: str
     name: str
     type: str
-    state: str
+    state: STATES
     created_at: datetime
 
+
 class DeviceUpdate(BaseModel):
-    state: str
+    state: STATES
