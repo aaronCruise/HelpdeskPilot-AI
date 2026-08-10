@@ -1,6 +1,6 @@
 // Everything related to ticket API requests
 
-const BACKEND_URL = 'https://musical-potato-r4pgwq69jj55fvx5-8000.app.github.dev/tickets/';
+const BACKEND_URL = 'https://special-fortnight-g47q6jr9gvjw2p9pr-8000.app.github.dev/tickets/'; //TODO: Change 
 
 export async function getTickets() {
 
@@ -19,11 +19,13 @@ export async function getTickets() {
     }
 }
 
-function getTicket(tid) {
+
+//TODO
+export function getTicket(tid) {
 
 }
 
-export async function createTicket(name, email, ticket_text) {
+export async function createTicket(requester_name, requester_email, text) {
     try {
         const response = await fetch(BACKEND_URL, {
             method: "POST",
@@ -31,9 +33,9 @@ export async function createTicket(name, email, ticket_text) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: name,
-                email: email,
-                ticket_text: ticket_text
+                requester_name: requester_name,
+                requester_email: requester_email,
+                text: text
             })
         });
         if (!response.ok) {
@@ -49,6 +51,7 @@ export async function createTicket(name, email, ticket_text) {
     }
 }
 
-function analyzeTicket(tid) {
+//TODO
+export function analyzeTicket(tid) {
 
 }

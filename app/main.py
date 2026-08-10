@@ -11,8 +11,6 @@ import app.models.device
 import app.models.checkout
 import app.models.recommendation
 
-FRONTEND_URL = "https://musical-potato-r4pgwq69jj55fvx5-5173.app.github.dev"
-
 # Load LLM API key into environment
 load_dotenv()
 
@@ -28,7 +26,7 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
+    allow_origins=["*"], #TODO change in production to only allow frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
