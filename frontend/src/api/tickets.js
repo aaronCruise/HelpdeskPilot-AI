@@ -2,13 +2,13 @@
 
 const BACKEND_URL = 'https://special-fortnight-g47q6jr9gvjw2p9pr-8000.app.github.dev/tickets/'; //TODO: Change 
 
-export async function getTickets() {
-
+async function fetchJson(url, options = {}) {
     try {
-        const response = await fetch(BACKEND_URL, {method: "GET"});
+        const response = await fetch(url, options);
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
+
         const result = await response.json();
         console.log(result);
         return result;
@@ -19,39 +19,28 @@ export async function getTickets() {
     }
 }
 
+export async function getTickets() {
+    return await fetchJson(BACKEND_URL, { method: "GET" });
+}
 
-//TODO
-export function getTicket(tid) {
-
+export async function getTicket(tid) {
+    return await fetchJson(`${BACKEND_URL}${tid}`, { method: "GET" });
 }
 
 export async function createTicket(requester_name, requester_email, text) {
-    try {
-        const response = await fetch(BACKEND_URL, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                requester_name: requester_name,
-                requester_email: requester_email,
-                text: text
-            })
-        });
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        const result = await response.json();
-        console.log(result);
-        return result;
-    }
-    catch (error) {
-        console.error(error.message);
-        return [];
-    }
+    return await fetchJson(BACKEND_URL, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            requester_name,
+            requester_email,
+            text
+        })
+    });
 }
 
-//TODO
-export function analyzeTicket(tid) {
-
+export async function analyzeTicket(tid) {
+    return await fetchJson(`${BACKEND_URL}${tid}/analyze`, { method: "POST" });
 }

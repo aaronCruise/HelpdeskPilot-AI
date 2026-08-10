@@ -1,14 +1,25 @@
 import { useState, useEffect } from 'react';
-import '../api/tickets.js';
 import { getTickets, getTicket, createTicket, analyzeTicket } from '../api/tickets.js';
 
 const TICKET_TABLE_NUM_COLUMNS = 7;
 
-function AnalyzeTicketForm() {
+function AnalyzeTicketForm({ onAnalyze, result, error }) {
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const ticket_id = formData.get('ticket_id');
+
+        if (!ticket_id) {
+            return;
+        }
+
+        await onAnalyze(Number(ticket_id));
+    }
+
     return (
         <>
             <h2> Analyze Ticket </h2>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="ticket_id"> Enter ticket ID: </label>
                     <input type="number" name="ticket_id" id="ticket-id" required />
@@ -18,6 +29,57 @@ function AnalyzeTicketForm() {
                 </div>
             </form>
             <h3> Recommendation: </h3>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {result && (
+                <div>
+                    <p><strong>Category:</strong> {result.category}</p>
+                    <p><strong>Priority:</strong> {result.priority}</p>
+                    <p><strong>Summary:</strong> {result.summary}</p>
+                    <p><strong>Recommended step:</strong> {result.recommended_step}</p>
+                </div>
+            )}
+        </>
+    );
+}
+
+function TicketByIdForm({ onFetch, ticket, error }) {
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const ticket_id = formData.get('ticket_id');
+
+        if (!ticket_id) {
+            return;
+        }
+
+        await onFetch(Number(ticket_id));
+    }
+
+    return (
+        <>
+            <h2> Get Ticket by ID </h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="ticket_id"> Enter ticket ID: </label>
+                    <input type="number" name="ticket_id" id="ticket-id" required />
+                </div>
+                <div>
+                    <input type="submit" value="Submit" />
+                </div>
+            </form>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {ticket && (
+                <div>
+                    <p><strong>ID:</strong> {ticket.tid}</p>
+                    <p><strong>Name:</strong> {ticket.requester_name}</p>
+                    <p><strong>Email:</strong> {ticket.requester_email}</p>
+                    <p><strong>Text:</strong> {ticket.text}</p>
+                    <p><strong>Category:</strong> {ticket.category}</p>
+                    <p><strong>Priority:</strong> {ticket.priority}</p>
+                    <p><strong>Status:</strong> {ticket.status}</p>
+                    <p><strong>Created:</strong> {ticket.created_at}</p>
+                </div>
+            )}
         </>
     );
 }
@@ -93,8 +155,6 @@ function TicketTable({ tickets }) {
     const closedRows = [];
     const safeTickets = Array.isArray(tickets) ? tickets : [];
 
-    tickets.Array
-
     safeTickets.forEach(ticket => {
         switch (ticket.status) {
             case 'new':
@@ -144,23 +204,55 @@ function TicketTable({ tickets }) {
 
 export function TicketDashboard() {
     const [tickets, setTickets] = useState([]);
+    const [recommendation, setRecommendation] = useState(null);
+    const [analyzeError, setAnalyzeError] = useState('');
+    const [selectedTicket, setSelectedTicket] = useState(null);
+    const [ticketError, setTicketError] = useState('');
+
     async function refreshTickets() {
         const result = await getTickets();
-        const tickets = result["tickets"];
+        const tickets = result?.tickets;
         setTickets(tickets || []);
-        console.log("Tickets loaded:", tickets);
+        console.log('Tickets loaded:', tickets);
     }
-    useEffect(
-        () => {
-            refreshTickets();
-        }, []);
+
+    async function handleAnalyzeTicket(tid) {
+        setAnalyzeError('');
+        setRecommendation(null);
+
+        const result = await analyzeTicket(tid);
+        if (!result || result.detail) {
+            setAnalyzeError(result?.detail || 'Unable to analyze ticket.');
+            return;
+        }
+
+        setRecommendation(result);
+    }
+
+    async function handleFetchTicket(tid) {
+        setTicketError('');
+        setSelectedTicket(null);
+
+        const result = await getTicket(tid);
+        if (!result || result.detail || Array.isArray(result)) {
+            setTicketError(result?.detail || 'Unable to fetch ticket.');
+            return;
+        }
+
+        setSelectedTicket(result);
+    }
+
+    useEffect(() => {
+        refreshTickets();
+    }, []);
 
     return (
         <>
             <div>
                 <TicketTable tickets={tickets} />
                 <CreateTicketForm onTicketCreated={refreshTickets} />
-                <AnalyzeTicketForm />
+                <AnalyzeTicketForm onAnalyze={handleAnalyzeTicket} result={recommendation} error={analyzeError} />
+                <TicketByIdForm onFetch={handleFetchTicket} ticket={selectedTicket} error={ticketError} />
             </div>
         </>
     );
