@@ -1,3 +1,7 @@
+import { useState, useEffect } from 'react';
+import '../api/tickets.js';
+import { getTickets } from '../api/tickets.js';
+
 const TICKET_TABLE_NUM_COLUMNS = 7;
 
 function AnalyzeTicketForm() {
@@ -13,16 +17,31 @@ function AnalyzeTicketForm() {
                     <input for="ticket_id" type="submit" value="Submit" />
                 </div>
             </form>
-            <h3> Recommendation: </h3>        
+            <h3> Recommendation: </h3>
         </>
     );
 }
 
-function CreateTicketForm() {
+function CreateTicketForm({onTicketCreated}) {
+    function handleSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formDate = new FormData(form);
+        const name = formDate.get("name");
+        const email = formDate.get("email");
+        const ticket_text = formDate.get("ticket_text");
+
+        console.log(`Creating ticket for ${name} (${email}): ${ticket_text}`);
+        const result = await createTicket(name, email, ticket_text);
+        console.log("Ticket created:", result['ticket']);
+        await onTicketCreated();
+    }
+
+
     return (
         <>
             <h2> Create Ticket </h2>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label for="name"> Enter your name: </label>
                     <input type="text" name="name" id="name" required />
@@ -56,13 +75,13 @@ function StatusRow({ status }) {
 function TicketRow({ ticket }) {
     return (
         <tr>
-            <td>{ticket.requesterName}</td>
-            <td>{ticket.requesterEmail}</td>
+            <td>{ticket.requester_name}</td>
+            <td>{ticket.requester_email}</td>
             <td>{ticket.text}</td>
             <td>{ticket.category}</td>
             <td>{ticket.priority}</td>
             <td>{ticket.status}</td>
-            <td>{ticket.createdAt}</td>
+            <td>{ticket.created_at}</td>
         </tr>
     );
 }
@@ -72,20 +91,23 @@ function TicketTable({ tickets }) {
     const inProgressRows = [];
     const resolvedRows = [];
     const closedRows = [];
+    const safeTickets = Array.isArray(tickets) ? tickets : [];
 
-    tickets.forEach(ticket => {
+    tickets.Array
+
+    safeTickets.forEach(ticket => {
         switch (ticket.status) {
             case 'new':
-                newRows.push(<TicketRow ticket={ticket} />);
+                newRows.push(<TicketRow key={ticket.id} ticket={ticket} />);
                 break;
             case 'in_progress':
-                inProgressRows.push(<TicketRow ticket={ticket} />);
+                inProgressRows.push(<TicketRow key={ticket.id} ticket={ticket} />);
                 break;
             case 'resolved':
-                resolvedRows.push(<TicketRow ticket={ticket} />);
+                resolvedRows.push(<TicketRow key={ticket.id} ticket={ticket} />);
                 break;
             case 'closed':
-                closedRows.push(<TicketRow ticket={ticket} />);
+                closedRows.push(<TicketRow key={ticket.id} ticket={ticket} />);
                 break;
         }
     })
@@ -106,13 +128,13 @@ function TicketTable({ tickets }) {
                     </tr>
                 </thead>
                 <tbody>
-                    <StatusRow status={'new'} />
+                    <StatusRow key={'new'} status={'new'} />
                     {newRows}
-                    <StatusRow status={'in_progress'} />
+                    <StatusRow key={'in_progress'} status={'in_progress'} />
                     {inProgressRows}
-                    <StatusRow status={'resolved'} />
+                    <StatusRow key={'resolved'} status={'resolved'} />
                     {resolvedRows}
-                    <StatusRow status={'closed'} />
+                    <StatusRow key={'closed'} status={'closed'} />
                     {closedRows}
                 </tbody>
             </table>
@@ -121,17 +143,30 @@ function TicketTable({ tickets }) {
 }
 
 export function TicketDashboard() {
+    const [tickets, setTickets] = useState([]);
+    async function refreshTickets() {
+        const result = await getTickets();
+        const tickets = result["tickets"];
+        setTickets(tickets || []);
+        console.log("Tickets loaded:", tickets);
+    }
+    useEffect(
+        () => {
+            refreshTickets();
+        }, []);
+
     return (
         <>
             <div>
-                <TicketTable tickets={static_tickets} />
-                <CreateTicketForm />
+                <TicketTable tickets={tickets} />
+                <CreateTicketForm onTicketCreated={refreshTickets} />
                 <AnalyzeTicketForm />
             </div>
         </>
     );
 }
 
+// For testing purposes
 const static_tickets = [
     {
         id: 1,

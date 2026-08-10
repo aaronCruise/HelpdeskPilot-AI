@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.routers.tickets import ticket_router
 from app.routers.devices import device_router
@@ -9,6 +10,8 @@ import app.models.ticket
 import app.models.device
 import app.models.checkout
 import app.models.recommendation
+
+FRONTEND_URL = "https://musical-potato-r4pgwq69jj55fvx5-5173.app.github.dev"
 
 # Load LLM API key into environment
 load_dotenv()
@@ -21,6 +24,15 @@ ingest_knowledge_base()
 
 # Start web server
 app = FastAPI()
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[FRONTEND_URL],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Mount routers
 app.include_router(ticket_router)
