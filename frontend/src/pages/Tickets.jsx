@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getTickets, getTicket, createTicket, analyzeTicket } from '../api/tickets.js';
 
-const TICKET_TABLE_NUM_COLUMNS = 7;
+const TICKET_TABLE_NUM_COLUMNS = 8;
 
 function RecommendationCard({ localError, error, ticket }) {
     return (
@@ -10,14 +10,10 @@ function RecommendationCard({ localError, error, ticket }) {
             {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
             {ticket && (
                 <div>
-                    <p><strong>ID:</strong> {ticket.tid}</p>
-                    <p><strong>Name:</strong> {ticket.requester_name}</p>
-                    <p><strong>Email:</strong> {ticket.requester_email}</p>
-                    <p><strong>Text:</strong> {ticket.text}</p>
                     <p><strong>Category:</strong> {ticket.category}</p>
                     <p><strong>Priority:</strong> {ticket.priority}</p>
-                    <p><strong>Status:</strong> {ticket.status}</p>
-                    <p><strong>Created:</strong> {ticket.created_at}</p>
+                    <p><strong>Summary:</strong> {ticket.summary}</p>
+                    <p><strong>Recommended Step:</strong> {ticket.recommended_step}</p>
                 </div>
             )}
         </>
@@ -159,6 +155,7 @@ function StatusRow({ status }) {
 function TicketRow({ ticket }) {
     return (
         <tr>
+            <td>{ticket.tid}</td>
             <td>{ticket.requester_name}</td>
             <td>{ticket.requester_email}</td>
             <td>{ticket.text}</td>
@@ -200,6 +197,7 @@ function TicketTable({ tickets }) {
             <table>
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Text</th>
