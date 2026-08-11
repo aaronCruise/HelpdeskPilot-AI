@@ -3,6 +3,28 @@ import { getTickets, getTicket, createTicket, analyzeTicket } from '../api/ticke
 
 const TICKET_TABLE_NUM_COLUMNS = 7;
 
+function RecommendationCard({ localError, error, ticket }) {
+    return (
+        <>
+            <h3> Recommendation: </h3>
+            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {ticket && (
+                <div>
+                    <p><strong>ID:</strong> {ticket.tid}</p>
+                    <p><strong>Name:</strong> {ticket.requester_name}</p>
+                    <p><strong>Email:</strong> {ticket.requester_email}</p>
+                    <p><strong>Text:</strong> {ticket.text}</p>
+                    <p><strong>Category:</strong> {ticket.category}</p>
+                    <p><strong>Priority:</strong> {ticket.priority}</p>
+                    <p><strong>Status:</strong> {ticket.status}</p>
+                    <p><strong>Created:</strong> {ticket.created_at}</p>
+                </div>
+            )}
+        </>
+    );
+
+}
+
 function AnalyzeTicketForm({ onAnalyze, result, error }) {
     const [localError, setLocalError] = useState('');
 
@@ -32,16 +54,7 @@ function AnalyzeTicketForm({ onAnalyze, result, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            <h3> Recommendation: </h3>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
-            {result && !error && (
-                <div>
-                    <p><strong>Category:</strong> {result.category}</p>
-                    <p><strong>Priority:</strong> {result.priority}</p>
-                    <p><strong>Summary:</strong> {result.summary}</p>
-                    <p><strong>Recommended step:</strong> {result.recommended_step}</p>
-                </div>
-            )}
+            <RecommendationCard localError={localError} error={error} ticket={result} />
         </>
     );
 }
@@ -75,24 +88,12 @@ function TicketByIdForm({ onFetch, ticket, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
-            {ticket && (
-                <div>
-                    <p><strong>ID:</strong> {ticket.tid}</p>
-                    <p><strong>Name:</strong> {ticket.requester_name}</p>
-                    <p><strong>Email:</strong> {ticket.requester_email}</p>
-                    <p><strong>Text:</strong> {ticket.text}</p>
-                    <p><strong>Category:</strong> {ticket.category}</p>
-                    <p><strong>Priority:</strong> {ticket.priority}</p>
-                    <p><strong>Status:</strong> {ticket.status}</p>
-                    <p><strong>Created:</strong> {ticket.created_at}</p>
-                </div>
-            )}
+
         </>
     );
 }
 
-function CreateTicketForm({onTicketCreated}) {
+function CreateTicketForm({ onTicketCreated }) {
     const [createError, setCreateError] = useState('');
 
     async function handleSubmit(event) {
