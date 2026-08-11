@@ -84,3 +84,16 @@ export async function createTicket(requester_name, requester_email, text) {
 export async function analyzeTicket(tid) {
     return await fetchJson(`${TICKETS_URL}${tid}/analyze`, { method: "POST" });
 }
+
+export async function patchTicket(tid, status, priority) {
+    return await fetchJson(`${TICKETS_URL}${tid}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            status,
+            priority
+        })
+    });
+}

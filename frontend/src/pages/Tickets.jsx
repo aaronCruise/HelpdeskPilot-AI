@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getTickets, getTicket, createTicket, analyzeTicket } from '../api/tickets.js';
+import { getTickets, getTicket, createTicket, analyzeTicket, patchTicket } from '../api/tickets.js';
 
 const TICKET_TABLE_NUM_COLUMNS = 8;
+const TICKET_STATUSES = ['new', 'in_progress', 'resolved', 'closed'];
+const TICKET_PRIORITIES = ['low', 'medium', 'high'];
 
 function RecommendationCard({ localError, error, ticket }) {
     return (
@@ -85,6 +87,67 @@ function TicketByIdForm({ onFetch, ticket, error }) {
                 </div>
             </form>
 
+        </>
+    );
+}
+
+function UpdateTicketForm({ onUpdate, result, error }) {
+    const [localError, setLocalError] = useState('');
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const ticket_id = Number(formData.get('ticket_id'));
+        const status = formData.get('status');
+        const priority = formData.get('priority');
+
+        if (!ticket_id || !status || !priority) {
+            setLocalError('Please fill in all required fields.');
+            return;
+        }
+
+        setLocalError('');
+        await onUpdate(ticket_id, status, priority);
+    }
+
+    return (
+        <>
+            <h2> Update Ticket </h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="ticket_id"> Ticket ID: </label>
+                    <input type="number" name="ticket_id" id="ticket_id" required />
+                </div>
+                <div>
+                    <label htmlFor="status"> New status: </label>
+                    <select name="status" id="status" required>
+                        <option value="">Select status</option>
+                        {TICKET_STATUSES.map(statusOption => (
+                            <option key={statusOption} value={statusOption}>{statusOption}</option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label htmlFor="priority"> New priority: </label>
+                    <select name="priority" id="priority" required>
+                        <option value="">Select priority</option>
+                        {TICKET_PRIORITIES.map(priorityOption => (
+                            <option key={priorityOption} value={priorityOption}>{priorityOption}</option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" value="Submit" />
+                </div>
+            </form>
+            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {result && !error && (
+                <div>
+                    <p><strong>Updated Ticket ID:</strong> {result.tid}</p>
+                    <p><strong>Status:</strong> {result.status}</p>
+                    <p><strong>Priority:</strong> {result.priority}</p>
+                </div>
+            )}
         </>
     );
 }
@@ -228,6 +291,8 @@ export function TicketDashboard() {
     const [analyzeError, setAnalyzeError] = useState('');
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [ticketError, setTicketError] = useState('');
+    const [updateResult, setUpdateResult] = useState(null);
+    const [updateError, setUpdateError] = useState('');
 
     async function refreshTickets() {
         const result = await getTickets();
@@ -262,6 +327,20 @@ export function TicketDashboard() {
         setSelectedTicket(result);
     }
 
+    async function handleUpdateTicket(tid, status, priority) {
+        setUpdateError('');
+        setUpdateResult(null);
+
+        const result = await patchTicket(tid, status, priority);
+        if (!result || result.detail || Array.isArray(result)) {
+            setUpdateError(result?.detail || 'Unable to update ticket.');
+            return;
+        }
+
+        setUpdateResult(result);
+        await refreshTickets();
+    }
+
     useEffect(() => {
         refreshTickets();
     }, []);
@@ -272,6 +351,7 @@ export function TicketDashboard() {
                 <TicketTable tickets={tickets} />
                 <CreateTicketForm onTicketCreated={refreshTickets} />
                 <AnalyzeTicketForm onAnalyze={handleAnalyzeTicket} result={recommendation} error={analyzeError} />
+                <UpdateTicketForm onUpdate={handleUpdateTicket} result={updateResult} error={updateError} />
                 <TicketByIdForm onFetch={handleFetchTicket} ticket={selectedTicket} error={ticketError} />
             </div>
         </>
