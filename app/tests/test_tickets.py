@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 from app.models.ticket import CATEGORIES, PRIORITIES, STATUSES
 
 
@@ -97,6 +99,34 @@ def test_nonexistent_ticket_patch(client):
     )
     assert response.status_code == 404
     assert response.json() == {"detail": "Ticket not found"}
+
+
+def test_llm_analyze_ticket_no_api_key(monkeypatch):
+    from app.services import llm_service
+
+    class DummyMessage:
+        content = '{"category":"network","priority":"high","summary":"Test summary","recommended_step":"Check Wi-Fi settings"}'
+
+    class DummyResponse:
+        message = DummyMessage()
+
+    def fake_chat(**kwargs):
+        return DummyResponse()
+
+    monkeypatch.setattr(llm_service, "chat", fake_chat)
+
+    ticket = SimpleNamespace(
+        text="The Wi-Fi is down.",
+        category=CATEGORIES.GENERAL,
+        priority=PRIORITIES.MEDIUM,
+    )
+
+    recommendation = llm_service.llm_analyze_ticket_no_api_key(ticket, ["Wi-Fi policy"])
+
+    assert recommendation.category == CATEGORIES.NETWORK
+    assert recommendation.priority == PRIORITIES.HIGH
+    assert recommendation.summary == "Test summary"
+    assert recommendation.recommended_step == "Check Wi-Fi settings"
 
 
 def test_analyze_ticket(client):
