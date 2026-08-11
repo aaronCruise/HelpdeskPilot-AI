@@ -1,8 +1,6 @@
-// Everything related to ticket API requests
-
-// TODO: Switch if necessary
-// const BACKEND_URL = 'https://special-fortnight-g47q6jr9gvjw2p9pr-8000.app.github.dev/tickets/';
-const BACKEND_URL = 'http://127.0.0.1:8000/tickets/';
+// Everything related to checkout API requests
+const BACKEND_URL = 'http://127.0.0.1:8000/checkouts/';
+const CHECKIN_URL = 'http://127.0.0.1:8000/checkin';
 
 function formatApiError(result, status) {
     if (!result) {
@@ -62,28 +60,56 @@ async function fetchJson(url, options = {}) {
     }
 }
 
-export async function getTickets() {
+export async function getCheckouts() {
     return await fetchJson(BACKEND_URL, { method: "GET" });
 }
 
-export async function getTicket(tid) {
-    return await fetchJson(`${BACKEND_URL}${tid}`, { method: "GET" });
+export async function getActiveCheckouts() {
+    return await fetchJson(`${BACKEND_URL}active`, { method: "GET" });
 }
 
-export async function createTicket(requester_name, requester_email, text) {
+export async function getCheckout(cid) {
+    return await fetchJson(`${BACKEND_URL}${cid}`, { method: "GET" });
+}
+
+export async function createCheckout(device_id, borrower_name, borrower_email, from_date, to_date) {
     return await fetchJson(BACKEND_URL, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            requester_name,
-            requester_email,
-            text
+            device_id,
+            borrower_name,
+            borrower_email,
+            from_date,
+            to_date
         })
     });
 }
 
-export async function analyzeTicket(tid) {
-    return await fetchJson(`${BACKEND_URL}${tid}/analyze`, { method: "POST" });
+export async function patchCheckout(cid, to_date, status) {
+    return await fetchJson(`http://127.0.0.1:8000/checkout/${cid}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            to_date,
+            status
+        })
+    });
+}
+
+export async function checkIn(cid, status) {
+    return await fetchJson(CHECKIN_URL, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            cid,
+            status
+        })
+    });
 }

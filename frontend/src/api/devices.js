@@ -1,8 +1,5 @@
-// Everything related to ticket API requests
-
-// TODO: Switch if necessary
-// const BACKEND_URL = 'https://special-fortnight-g47q6jr9gvjw2p9pr-8000.app.github.dev/tickets/';
-const BACKEND_URL = 'http://127.0.0.1:8000/tickets/';
+// Everything related to device API requests
+const BACKEND_URL = 'http://127.0.0.1:8000/devices/';
 
 function formatApiError(result, status) {
     if (!result) {
@@ -62,28 +59,36 @@ async function fetchJson(url, options = {}) {
     }
 }
 
-export async function getTickets() {
+export async function getDevices() {
     return await fetchJson(BACKEND_URL, { method: "GET" });
 }
 
-export async function getTicket(tid) {
-    return await fetchJson(`${BACKEND_URL}${tid}`, { method: "GET" });
+export async function getDevice(did) {
+    return await fetchJson(`${BACKEND_URL}${did}`, { method: "GET" });
 }
 
-export async function createTicket(requester_name, requester_email, text) {
+export async function createDevice(asset_tag, name, type) {
     return await fetchJson(BACKEND_URL, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            requester_name,
-            requester_email,
-            text
+            asset_tag,
+            name,
+            type
         })
     });
 }
 
-export async function analyzeTicket(tid) {
-    return await fetchJson(`${BACKEND_URL}${tid}/analyze`, { method: "POST" });
+export async function patchDevice(did, state) {
+    return await fetchJson(`${BACKEND_URL}${did}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            state
+        })
+    });
 }

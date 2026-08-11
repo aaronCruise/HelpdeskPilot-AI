@@ -4,15 +4,19 @@ import { getTickets, getTicket, createTicket, analyzeTicket } from '../api/ticke
 const TICKET_TABLE_NUM_COLUMNS = 7;
 
 function AnalyzeTicketForm({ onAnalyze, result, error }) {
+    const [localError, setLocalError] = useState('');
+
     async function handleSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const ticket_id = formData.get('ticket_id');
 
         if (!ticket_id) {
+            setLocalError('Ticket ID is required.');
             return;
         }
 
+        setLocalError('');
         await onAnalyze(Number(ticket_id));
     }
 
@@ -29,8 +33,8 @@ function AnalyzeTicketForm({ onAnalyze, result, error }) {
                 </div>
             </form>
             <h3> Recommendation: </h3>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {result && (
+            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {result && !error && (
                 <div>
                     <p><strong>Category:</strong> {result.category}</p>
                     <p><strong>Priority:</strong> {result.priority}</p>
@@ -43,15 +47,19 @@ function AnalyzeTicketForm({ onAnalyze, result, error }) {
 }
 
 function TicketByIdForm({ onFetch, ticket, error }) {
+    const [localError, setLocalError] = useState('');
+
     async function handleSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
         const ticket_id = formData.get('ticket_id');
 
         if (!ticket_id) {
+            setLocalError('Ticket ID is required.');
             return;
         }
 
+        setLocalError('');
         await onFetch(Number(ticket_id));
     }
 
@@ -67,7 +75,7 @@ function TicketByIdForm({ onFetch, ticket, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
             {ticket && (
                 <div>
                     <p><strong>ID:</strong> {ticket.tid}</p>
@@ -85,6 +93,8 @@ function TicketByIdForm({ onFetch, ticket, error }) {
 }
 
 function CreateTicketForm({onTicketCreated}) {
+    const [createError, setCreateError] = useState('');
+
     async function handleSubmit(event) {
         event.preventDefault();
         const form = event.target;
@@ -93,12 +103,22 @@ function CreateTicketForm({onTicketCreated}) {
         const email = formDate.get("email");
         const ticket_text = formDate.get("ticket_text");
 
-        console.log(`Creating ticket for ${name} (${email}): ${ticket_text}`);
-        const result = await createTicket(name, email, ticket_text);
-        console.log("Ticket created:", result['ticket']);
-        await onTicketCreated();
-    }
+        if (!name || !email || !ticket_text) {
+            setCreateError('Please fill in all required fields.');
+            return;
+        }
 
+        setCreateError('');
+        const result = await createTicket(name, email, ticket_text);
+        if (result?.detail) {
+            setCreateError(result.detail);
+            return;
+        }
+
+        setCreateError('');
+        await onTicketCreated();
+        form.reset();
+    }
 
     return (
         <>
@@ -114,8 +134,9 @@ function CreateTicketForm({onTicketCreated}) {
                 </div>
                 <div>
                     <label htmlFor="ticket_text"> Please describe your ticket: </label> <br />
-                    <textarea name="ticket_text" id="ticket_text" cols="50" rows="10"></textarea>
+                    <textarea name="ticket_text" id="ticket_text" cols="50" rows="10" required></textarea>
                 </div>
+                {createError && <p style={{ color: 'red' }}>{createError}</p>}
                 <div>
                     <input type="submit" value="Submit" />
                 </div>
@@ -221,7 +242,7 @@ export function TicketDashboard() {
         setRecommendation(null);
 
         const result = await analyzeTicket(tid);
-        if (!result || result.detail) {
+        if (!result || result.detail || Array.isArray(result)) {
             setAnalyzeError(result?.detail || 'Unable to analyze ticket.');
             return;
         }
