@@ -26,8 +26,11 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], #TODO change in production to only allow frontend domain
-    allow_credentials=True,
+    allow_origins=[
+        "http://localhost:5173",
+        "https://special-fortnight-g47q6jr9gvjw2p9pr-5173.app.github.dev"
+    ],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

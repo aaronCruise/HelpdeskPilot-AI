@@ -1,8 +1,5 @@
 // Everything related to ticket API requests
-
-// TODO: Switch if necessary
-// const BACKEND_URL = 'https://special-fortnight-g47q6jr9gvjw2p9pr-8000.app.github.dev/tickets/';
-const BACKEND_URL = 'http://127.0.0.1:8000/tickets/';
+import { TICKETS_URL } from './config';
 
 function formatApiError(result, status) {
     if (!result) {
@@ -63,15 +60,15 @@ async function fetchJson(url, options = {}) {
 }
 
 export async function getTickets() {
-    return await fetchJson(BACKEND_URL, { method: "GET" });
+    return await fetchJson(TICKETS_URL, { method: "GET" });
 }
 
 export async function getTicket(tid) {
-    return await fetchJson(`${BACKEND_URL}${tid}`, { method: "GET" });
+    return await fetchJson(`${TICKETS_URL}${tid}`, { method: "GET" });
 }
 
 export async function createTicket(requester_name, requester_email, text) {
-    return await fetchJson(BACKEND_URL, {
+    return await fetchJson(TICKETS_URL, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -85,5 +82,5 @@ export async function createTicket(requester_name, requester_email, text) {
 }
 
 export async function analyzeTicket(tid) {
-    return await fetchJson(`${BACKEND_URL}${tid}/analyze`, { method: "POST" });
+    return await fetchJson(`${TICKETS_URL}${tid}/analyze`, { method: "POST" });
 }

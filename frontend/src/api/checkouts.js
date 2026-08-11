@@ -1,6 +1,5 @@
 // Everything related to checkout API requests
-const BACKEND_URL = 'http://127.0.0.1:8000/checkouts/';
-const CHECKIN_URL = 'http://127.0.0.1:8000/checkin';
+import { CHECKOUTS_URL, CHECKOUT_URL, CHECKIN_URL } from './config';
 
 function formatApiError(result, status) {
     if (!result) {
@@ -61,19 +60,19 @@ async function fetchJson(url, options = {}) {
 }
 
 export async function getCheckouts() {
-    return await fetchJson(BACKEND_URL, { method: "GET" });
+    return await fetchJson(CHECKOUTS_URL, { method: "GET" });
 }
 
 export async function getActiveCheckouts() {
-    return await fetchJson(`${BACKEND_URL}active`, { method: "GET" });
+    return await fetchJson(`${CHECKOUTS_URL}active`, { method: "GET" });
 }
 
 export async function getCheckout(cid) {
-    return await fetchJson(`${BACKEND_URL}${cid}`, { method: "GET" });
+    return await fetchJson(`${CHECKOUTS_URL}${cid}`, { method: "GET" });
 }
 
 export async function createCheckout(device_id, borrower_name, borrower_email, from_date, to_date) {
-    return await fetchJson(BACKEND_URL, {
+    return await fetchJson(CHECKOUTS_URL, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -89,7 +88,7 @@ export async function createCheckout(device_id, borrower_name, borrower_email, f
 }
 
 export async function patchCheckout(cid, to_date, status) {
-    return await fetchJson(`http://127.0.0.1:8000/checkout/${cid}`, {
+    return await fetchJson(`${CHECKOUT_URL}${cid}`, {
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json'

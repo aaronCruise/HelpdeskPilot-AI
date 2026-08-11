@@ -1,5 +1,5 @@
 // Everything related to device API requests
-const BACKEND_URL = 'http://127.0.0.1:8000/devices/';
+import { DEVICES_URL } from './config';
 
 function formatApiError(result, status) {
     if (!result) {
@@ -60,15 +60,15 @@ async function fetchJson(url, options = {}) {
 }
 
 export async function getDevices() {
-    return await fetchJson(BACKEND_URL, { method: "GET" });
+    return await fetchJson(DEVICES_URL, { method: "GET" });
 }
 
 export async function getDevice(did) {
-    return await fetchJson(`${BACKEND_URL}${did}`, { method: "GET" });
+    return await fetchJson(`${DEVICES_URL}${did}`, { method: "GET" });
 }
 
 export async function createDevice(asset_tag, name, type) {
-    return await fetchJson(BACKEND_URL, {
+    return await fetchJson(DEVICES_URL, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ export async function createDevice(asset_tag, name, type) {
 }
 
 export async function patchDevice(did, state) {
-    return await fetchJson(`${BACKEND_URL}${did}`, {
+    return await fetchJson(`${DEVICES_URL}${did}`, {
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json'
