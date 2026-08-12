@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getTickets, getTicket, createTicket, analyzeTicket, patchTicket } from '../api/tickets.js';
+import './Tickets.css';
 
 const TICKET_TABLE_NUM_COLUMNS = 8;
 const TICKET_STATUSES = ['new', 'in_progress', 'resolved', 'closed'];

@@ -1,0 +1,16 @@
+/* Global styles */
+
+:root {
+  --primary-color: #3d67ef;
+  --secondary-color: #c1ceed;
+  --font-family: Verdana, sans-serif;
+  --font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: var(--secondary-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+}

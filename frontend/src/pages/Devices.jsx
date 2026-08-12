@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getDevices, getDevice, createDevice, patchDevice } from '../api/devices.js';
+import './Devices.css';
 
 const DEVICE_TABLE_NUM_COLUMNS = 6;
 const DEVICE_TYPES = ['computer', 'phone', 'tablet', 'accessory'];

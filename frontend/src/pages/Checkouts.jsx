@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getCheckouts, getActiveCheckouts, getCheckout, createCheckout, patchCheckout, checkIn } from '../api/checkouts.js';
+import './Checkouts.css';
 
 const CHECKOUT_STATUSES = ['active', 'returned'];
 const CHECKIN_STATUSES = ['returned'];

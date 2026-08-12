@@ -5,6 +5,7 @@ import { getActiveCheckouts } from './api/checkouts.js';
 import { TicketDashboard } from './pages/Tickets.jsx';
 import { DeviceDashboard } from './pages/Devices.jsx';
 import { CheckoutDashboard } from './pages/Checkouts.jsx';
+import './App.css';
 
 function Dashboard() {
   const [openTickets, setOpenTickets] = useState(0);

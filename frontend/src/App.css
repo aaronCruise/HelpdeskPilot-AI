@@ -1,0 +1,8 @@
+/* App styles */
+main {
+  background-color: var(--secondary-color);
+  color: rgb(87, 65, 65);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  text-align: center;
+}
