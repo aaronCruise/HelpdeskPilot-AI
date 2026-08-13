@@ -1,1 +1,13 @@
-/* Style for the Checkouts page */
+/* Checkouts page specific styles */
+
+th {
+  color: var(--ctp-green);
+}
+
+.checkout-details {
+  background-color: var(--ctp-surface0);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--ctp-green);
+  margin-top: 1rem;
+}

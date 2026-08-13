@@ -1,8 +1,221 @@
-/* App styles */
-main {
-  background-color: var(--secondary-color);
-  color: rgb(87, 65, 65);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  text-align: center;
+/* Layout structure */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--ctp-base);
+}
+
+.sidebar {
+  width: 240px;
+  background-color: var(--ctp-mantle);
+  padding: 2rem 1rem;
+  border-right: 1px solid var(--ctp-surface0);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar button {
+  background: transparent;
+  border: none;
+  color: var(--ctp-subtext1);
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.sidebar button:hover {
+  background-color: var(--ctp-surface0);
+  color: var(--ctp-text);
+}
+
+.sidebar button.active {
+  background-color: var(--ctp-surface1);
+  color: var(--ctp-blue);
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* Dashboard styles */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.stat-card {
+  background-color: var(--ctp-surface0);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: var(--transition);
+  border: 1px solid var(--ctp-surface1);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card h2 {
+  font-size: 1rem;
+  color: var(--ctp-subtext0);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ctp-text);
+  margin: 0;
+}
+
+/* Common form and table elements (shared across pages) */
+form {
+  background-color: var(--ctp-surface0);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  border: 1px solid var(--ctp-surface1);
+  max-width: 600px;
+}
+
+form div {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--ctp-subtext1);
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.625rem;
+  border-radius: 6px;
+  border: 1px solid var(--ctp-surface2);
+  background-color: var(--ctp-base);
+  color: var(--ctp-text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--ctp-blue);
+  box-shadow: 0 0 0 2px rgba(138, 173, 244, 0.2);
+}
+
+input[type="submit"] {
+  background-color: var(--ctp-blue);
+  color: var(--ctp-base);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+input[type="submit"]:hover {
+  background-color: var(--ctp-sky);
+  transform: translateY(-1px);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--ctp-surface0);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--ctp-surface1);
+}
+
+th {
+  background-color: var(--ctp-surface1);
+  color: var(--ctp-mauve);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+tbody tr:hover {
+  background-color: var(--ctp-surface1);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Buttons */
+button:not(.sidebar button) {
+  background-color: var(--ctp-surface2);
+  color: var(--ctp-text);
+  border: 1px solid var(--ctp-surface1);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: var(--transition);
+  margin: 0.5rem 0;
+}
+
+button:not(.sidebar button):hover {
+  background-color: var(--ctp-surface1);
+  border-color: var(--ctp-blue);
+}
+
+/* Page Headers */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--ctp-surface0);
+  padding-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Utils */
+.error-message {
+  color: var(--ctp-red);
+  background-color: rgba(237, 135, 150, 0.1);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(237, 135, 150, 0.2);
+  margin: 1rem 0;
+  font-size: 0.9rem;
 }

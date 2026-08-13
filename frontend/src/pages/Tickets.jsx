@@ -8,9 +8,9 @@ const TICKET_PRIORITIES = ['low', 'medium', 'high'];
 
 function RecommendationCard({ localError, error, ticket }) {
     return (
-        <>
+        <div className="recommendation-card">
             <h3> Recommendation: </h3>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {(localError || error) && <p className="error-message">{localError || error}</p>}
             {ticket && (
                 <div>
                     <p><strong>Category:</strong> {ticket.category}</p>
@@ -19,7 +19,7 @@ function RecommendationCard({ localError, error, ticket }) {
                     <p><strong>Recommended Step:</strong> {ticket.recommended_step}</p>
                 </div>
             )}
-        </>
+        </div>
     );
 
 }
@@ -141,7 +141,7 @@ function UpdateTicketForm({ onUpdate, result, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {(localError || error) && <p className="error-message">{localError || error}</p>}
             {result && !error && (
                 <div>
                     <p><strong>Updated Ticket ID:</strong> {result.tid}</p>
@@ -197,7 +197,7 @@ function CreateTicketForm({ onTicketCreated }) {
                     <label htmlFor="ticket_text"> Please describe your ticket: </label> <br />
                     <textarea name="ticket_text" id="ticket_text" cols="50" rows="10" required></textarea>
                 </div>
-                {createError && <p style={{ color: 'red' }}>{createError}</p>}
+                {createError && <p className="error-message">{createError}</p>}
                 <div>
                     <input type="submit" value="Submit" />
                 </div>
@@ -208,7 +208,7 @@ function CreateTicketForm({ onTicketCreated }) {
 
 function StatusRow({ status }) {
     return (
-        <tr>
+        <tr className="status-row">
             <th colSpan={TICKET_TABLE_NUM_COLUMNS}>
                 {status}
             </th>

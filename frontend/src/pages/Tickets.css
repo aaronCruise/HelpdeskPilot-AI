@@ -1,1 +1,29 @@
-/* Style for the Tickets page */
+/* Tickets page specific styles */
+
+.status-row th {
+  background-color: var(--ctp-surface2);
+  color: var(--ctp-yellow);
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+}
+
+.recommendation-card {
+  background-color: var(--ctp-mantle);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--ctp-green);
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.recommendation-card h3 {
+  color: var(--ctp-green);
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: var(--ctp-red);
+  font-weight: 500;
+  margin: 0.5rem 0;
+}

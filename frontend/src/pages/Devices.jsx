@@ -54,7 +54,7 @@ function CreateDeviceForm({ onDeviceCreated }) {
                         ))}
                     </select>
                 </div>
-                {createError && <p style={{ color: 'red' }}>{createError}</p>}
+                {createError && <p className="error-message">{createError}</p>}
                 <div>
                     <input type="submit" value="Submit" />
                 </div>
@@ -88,9 +88,9 @@ function DeviceByIdForm({ onFetch, device, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
             {device && (
-                <div>
+                <div className="device-details">
                     <p><strong>ID:</strong> {device.did}</p>
                     <p><strong>Asset tag:</strong> {device.asset_tag}</p>
                     <p><strong>Name:</strong> {device.name}</p>
@@ -142,9 +142,9 @@ function UpdateDeviceStateForm({ onUpdate, result, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {(localError || error) && <p className="error-message">{localError || error}</p>}
             {result && !error && (
-                <div>
+                <div className="device-details">
                     <p><strong>Updated Device ID:</strong> {result.did}</p>
                     <p><strong>State:</strong> {result.state}</p>
                 </div>

@@ -1,1 +1,13 @@
-/* Style for the Devices page */
+/* Devices page specific styles */
+
+th {
+  color: var(--ctp-blue);
+}
+
+.device-details {
+  background-color: var(--ctp-surface0);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--ctp-blue);
+  margin-top: 1rem;
+}

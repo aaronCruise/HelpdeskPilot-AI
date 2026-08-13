@@ -58,7 +58,7 @@ function CreateCheckoutForm({ onCheckoutCreated }) {
                     <label htmlFor="to_date"> To date: </label>
                     <input type="datetime-local" name="to_date" id="to_date" required />
                 </div>
-                {createError && <p style={{ color: 'red' }}>{createError}</p>}
+                {createError && <p className="error-message">{createError}</p>}
                 <div>
                     <input type="submit" value="Submit" />
                 </div>
@@ -96,9 +96,9 @@ function CheckoutByIdForm({ onFetch, checkout, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {(localError || error) && <p className="error-message">{localError || error}</p>}
             {checkout && (
-                <div>
+                <div className="checkout-details">
                     <p><strong>ID:</strong> {checkout.cid}</p>
                     <p><strong>Device ID:</strong> {checkout.device_id}</p>
                     <p><strong>Borrower name:</strong> {checkout.borrower_name}</p>
@@ -156,9 +156,9 @@ function CheckoutUpdateForm({ onUpdate, result, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {(localError || error) && <p className="error-message">{localError || error}</p>}
             {result && !error && (
-                <div>
+                <div className="checkout-details">
                     <p><strong>Updated Checkout ID:</strong> {result.cid}</p>
                     <p><strong>Status:</strong> {result.status}</p>
                     <p><strong>To date:</strong> {result.to_date}</p>
@@ -207,9 +207,9 @@ function CheckInForm({ onCheckIn, result, error }) {
                     <input type="submit" value="Submit" />
                 </div>
             </form>
-            {(localError || error) && <p style={{ color: 'red' }}>{localError || error}</p>}
+            {(localError || error) && <p className="error-message">{localError || error}</p>}
             {result && !error && (
-                <div>
+                <div className="checkout-details">
                     <p><strong>Checked in checkout ID:</strong> {result.cid}</p>
                     <p><strong>Status:</strong> {result.status}</p>
                 </div>
@@ -264,7 +264,7 @@ function ActiveCheckoutList({ checkouts, error }) {
     return (
         <>
             <h2> Active Checkouts </h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
             {Array.isArray(checkouts) && checkouts.length > 0 ? (
                 <table>
                     <thead>

@@ -32,19 +32,19 @@ function Dashboard() {
 
   return (
     <>
-      <h1>Dashboard</h1>
-      <div>
-        <div>
+      <h1>Dashboard Overview</h1>
+      <div className="dashboard-grid">
+        <div className="stat-card">
           <h2>Open Tickets</h2>
-          <p>{openTickets}</p>
+          <p className="stat-value">{openTickets}</p>
         </div>
-        <div>
+        <div className="stat-card">
           <h2>Available Devices</h2>
-          <p>{availableDevices}</p>
+          <p className="stat-value">{availableDevices}</p>
         </div>
-        <div>
+        <div className="stat-card">
           <h2>Active Checkouts</h2>
-          <p>{activeCheckouts}</p>
+          <p className="stat-value">{activeCheckouts}</p>
         </div>
       </div>
     </>
@@ -64,14 +64,16 @@ export default function App() {
 
   return (
     <>
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
-        <aside style={{ width: '180px', padding: '20px', borderRight: '1px solid #ccc' }}>
-          <button onClick={() => setPage('dashboard')}>Dashboard</button>
-          <button onClick={() => setPage('tickets')}>Tickets</button>
-          <button onClick={() => setPage('devices')}>Devices</button>
-          <button onClick={() => setPage('checkouts')}>Checkouts</button>
+      <div className="app-container">
+        <aside className="sidebar">
+          <nav>
+            <button className={page === 'dashboard' ? 'active' : ''} onClick={() => setPage('dashboard')}>Dashboard</button>
+            <button className={page === 'tickets' ? 'active' : ''} onClick={() => setPage('tickets')}>Tickets</button>
+            <button className={page === 'devices' ? 'active' : ''} onClick={() => setPage('devices')}>Devices</button>
+            <button className={page === 'checkouts' ? 'active' : ''} onClick={() => setPage('checkouts')}>Checkouts</button>
+          </nav>
         </aside>
-        <main style={{ flex: 1, padding: '20px' }}>
+        <main className="main-content">
           <PageComponent />
         </main>
       </div>
