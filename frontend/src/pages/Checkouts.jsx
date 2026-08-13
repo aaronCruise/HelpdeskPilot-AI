@@ -362,8 +362,11 @@ export function CheckoutDashboard() {
     }
 
     useEffect(() => {
-        refreshCheckouts();
-        refreshActiveCheckouts();
+        async function fetchData() {
+            await refreshCheckouts();
+            await refreshActiveCheckouts();
+        }
+        fetchData();
     }, []);
 
     return (

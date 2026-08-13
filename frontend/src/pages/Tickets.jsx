@@ -58,8 +58,8 @@ function AnalyzeTicketForm({ onAnalyze, result, error }) {
     );
 }
 
-function TicketByIdForm({ onFetch, ticket, error }) {
-    const [localError, setLocalError] = useState('');
+function TicketByIdForm({onFetch}) {
+    const [, setLocalError] = useState('');
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -290,8 +290,8 @@ export function TicketDashboard() {
     const [tickets, setTickets] = useState([]);
     const [recommendation, setRecommendation] = useState(null);
     const [analyzeError, setAnalyzeError] = useState('');
-    const [selectedTicket, setSelectedTicket] = useState(null);
-    const [ticketError, setTicketError] = useState('');
+    const [, setSelectedTicket] = useState(null);
+    const [, setTicketError] = useState('');
     const [updateResult, setUpdateResult] = useState(null);
     const [updateError, setUpdateError] = useState('');
 
@@ -343,7 +343,10 @@ export function TicketDashboard() {
     }
 
     useEffect(() => {
-        refreshTickets();
+        async function fetchTickets() {
+            await refreshTickets();
+        }
+        fetchTickets();
     }, []);
 
     return (
@@ -353,7 +356,7 @@ export function TicketDashboard() {
                 <CreateTicketForm onTicketCreated={refreshTickets} />
                 <AnalyzeTicketForm onAnalyze={handleAnalyzeTicket} result={recommendation} error={analyzeError} />
                 <UpdateTicketForm onUpdate={handleUpdateTicket} result={updateResult} error={updateError} />
-                <TicketByIdForm onFetch={handleFetchTicket} ticket={selectedTicket} error={ticketError} />
+                <TicketByIdForm onFetch={handleFetchTicket} />
             </div>
         </>
     );

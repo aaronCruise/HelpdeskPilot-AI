@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { getDevices, getDevice, createDevice, patchDevice } from '../api/devices.js';
 import './Devices.css';
 
-const DEVICE_TABLE_NUM_COLUMNS = 6;
 const DEVICE_TYPES = ['computer', 'phone', 'tablet', 'accessory'];
 const DEVICE_STATES = ['available', 'checked_out', 'maintenance', 'retired'];
 
@@ -233,7 +232,10 @@ export function DeviceDashboard() {
     }
 
     useEffect(() => {
-        refreshDevices();
+        async function fetchDevices() {
+            await refreshDevices();
+        }
+        fetchDevices();
     }, []);
 
     return (
