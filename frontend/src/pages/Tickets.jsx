@@ -6,25 +6,34 @@ const TICKET_TABLE_NUM_COLUMNS = 8;
 const TICKET_STATUSES = ['new', 'in_progress', 'resolved', 'closed'];
 const TICKET_PRIORITIES = ['low', 'medium', 'high'];
 
-function RecommendationCard({ localError, error, ticket }) {
+function RecommendationCard({ localError, error, ticket, isAnalyzing }) {
     return (
-        <div className="recommendation-card">
+        <div className={`recommendation-card ${isAnalyzing ? 'analyzing' : ''}`}>
             <h3> Recommendation: </h3>
-            {(localError || error) && <p className="error-message">{localError || error}</p>}
-            {ticket && (
-                <div>
-                    <p><strong>Category:</strong> {ticket.category}</p>
-                    <p><strong>Priority:</strong> {ticket.priority}</p>
-                    <p><strong>Summary:</strong> {ticket.summary}</p>
-                    <p><strong>Recommended Step:</strong> {ticket.recommended_step}</p>
+            {isAnalyzing ? (
+                <div className="analyzing-message">
+                    <span className="pulse-dot"></span>
+                    <span>generating recommendation...</span>
                 </div>
+            ) : (
+                <>
+                    {(localError || error) && <p className="error-message">{localError || error}</p>}
+                    {ticket && (
+                        <div>
+                            <p><strong>Category:</strong> {ticket.category}</p>
+                            <p><strong>Priority:</strong> {ticket.priority}</p>
+                            <p><strong>Summary:</strong> {ticket.summary}</p>
+                            <p><strong>Recommended Step:</strong> {ticket.recommended_step}</p>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
 
 }
 
-function AnalyzeTicketForm({ onAnalyze, result, error }) {
+function AnalyzeTicketForm({ onAnalyze, result, error, isAnalyzing }) {
     const [localError, setLocalError] = useState('');
 
     async function handleSubmit(event) {
@@ -50,10 +59,10 @@ function AnalyzeTicketForm({ onAnalyze, result, error }) {
                     <input type="number" name="ticket_id" id="ticket-id" required />
                 </div>
                 <div>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" disabled={isAnalyzing} />
                 </div>
             </form>
-            <RecommendationCard localError={localError} error={error} ticket={result} />
+            <RecommendationCard localError={localError} error={error} ticket={result} isAnalyzing={isAnalyzing} />
         </>
     );
 }
@@ -290,6 +299,7 @@ export function TicketDashboard() {
     const [tickets, setTickets] = useState([]);
     const [recommendation, setRecommendation] = useState(null);
     const [analyzeError, setAnalyzeError] = useState('');
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [, setSelectedTicket] = useState(null);
     const [, setTicketError] = useState('');
     const [updateResult, setUpdateResult] = useState(null);
@@ -305,14 +315,19 @@ export function TicketDashboard() {
     async function handleAnalyzeTicket(tid) {
         setAnalyzeError('');
         setRecommendation(null);
+        setIsAnalyzing(true);
 
-        const result = await analyzeTicket(tid);
-        if (!result || result.detail || Array.isArray(result)) {
-            setAnalyzeError(result?.detail || 'Unable to analyze ticket.');
-            return;
+        try {
+            const result = await analyzeTicket(tid);
+            if (!result || result.detail || Array.isArray(result)) {
+                setAnalyzeError(result?.detail || 'Unable to analyze ticket.');
+                return;
+            }
+
+            setRecommendation(result);
+        } finally {
+            setIsAnalyzing(false);
         }
-
-        setRecommendation(result);
     }
 
     async function handleFetchTicket(tid) {
@@ -354,7 +369,7 @@ export function TicketDashboard() {
             <div>
                 <TicketTable tickets={tickets} />
                 <CreateTicketForm onTicketCreated={refreshTickets} />
-                <AnalyzeTicketForm onAnalyze={handleAnalyzeTicket} result={recommendation} error={analyzeError} />
+                <AnalyzeTicketForm onAnalyze={handleAnalyzeTicket} result={recommendation} error={analyzeError} isAnalyzing={isAnalyzing} />
                 <UpdateTicketForm onUpdate={handleUpdateTicket} result={updateResult} error={updateError} />
                 <TicketByIdForm onFetch={handleFetchTicket} />
             </div>
