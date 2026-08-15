@@ -5,14 +5,11 @@ from backend.routers.tickets import ticket_router
 from backend.routers.devices import device_router
 from backend.routers.checkouts import checkout_router
 from backend.services.rag_service import ingest_knowledge_base
-from dotenv import load_dotenv
+from backend.config import settings
 import backend.models.ticket
 import backend.models.device
 import backend.models.checkout
 import backend.models.recommendation
-
-# Load LLM API key into environment
-load_dotenv()
 
 # Create database & tables
 Base.metadata.create_all(bind=engine)
@@ -26,10 +23,7 @@ app = FastAPI()
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://special-fortnight-g47q6jr9gvjw2p9pr-5173.app.github.dev"
-    ],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],

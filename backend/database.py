@@ -4,9 +4,9 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-from backend.paths import DB_FILE
+from backend.config import settings
 
-DATABASE_URL = os.environ.get("HDPILOT_DB_URL", f"sqlite:///{DB_FILE}")
+DATABASE_URL = settings.DATABASE_URL
 
 engine = create_engine(
     DATABASE_URL,

@@ -4,7 +4,7 @@ import logging
 from backend.models.ticket import Ticket, CATEGORIES, PRIORITIES
 from backend.schemas.recommendation import RecommendationCreate
 from google import genai
-from os import environ
+from backend.config import settings
 
 logger = logging.getLogger(__name__)
 if not logger.handlers:
@@ -20,7 +20,6 @@ try:
 except ImportError:
     chat = None
 
-MODEL_CHOICE = "gemini-3.6-flash"
 
 SYSTEM_INSTRUCTIONS = (
     "You are a senior IT helpdesk technician. "
@@ -34,10 +33,10 @@ SYSTEM_INSTRUCTIONS = (
 
 def api_key_present() -> bool:
     """
-    Checks if the GEMINI_API_KEY is present in the environment variables.
+    Checks if the GEMINI_API_KEY is present in the settings.
     Returns True if present, False otherwise.
     """
-    return "GEMINI_API_KEY" in environ
+    return settings.GEMINI_API_KEY is not None
 
 
 def llm_analyze_ticket(ticket: Ticket, relevant_chunks: list) -> RecommendationCreate:
@@ -48,7 +47,7 @@ def llm_analyze_ticket(ticket: Ticket, relevant_chunks: list) -> RecommendationC
 
 
 def llm_analyze_ticket_with_api_key(ticket: Ticket, relevant_chunks: list) -> RecommendationCreate:
-    client = genai.Client()
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
     prompt = (
         f"Ticket text: {ticket.text}\n"
@@ -57,11 +56,11 @@ def llm_analyze_ticket_with_api_key(ticket: Ticket, relevant_chunks: list) -> Re
         f"Relevant knowledge: {relevant_chunks}"
     )
 
-    logger.info("LLM selected model: %s", MODEL_CHOICE)
+    logger.info("LLM selected model: %s", settings.GEMINI_MODEL)
     logger.debug("LLM prompt: %s", prompt)
 
     response = client.models.generate_content(
-        model=MODEL_CHOICE,
+        model=settings.GEMINI_MODEL,
         contents=prompt,
         config={
             "system_instruction": SYSTEM_INSTRUCTIONS,
@@ -82,7 +81,7 @@ def llm_analyze_ticket_no_api_key(ticket: Ticket, relevant_chunks: list) -> Reco
     if chat is None:
         raise ImportError("Ollama is not installed.")
 
-    model_name = "llama3.2:1b"
+    model_name = settings.OLLAMA_MODEL
     prompt = (
         f"Ticket text: {ticket.text}\n"
         f"Initial category: {ticket.category}\n"

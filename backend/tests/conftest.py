@@ -1,9 +1,9 @@
-import os
 import pytest
 from fastapi.testclient import TestClient
-from backend.paths import TEST_DB_FILE
+from backend.config import settings
 
-os.environ["HDPILOT_DB_URL"] = f"sqlite:///{TEST_DB_FILE}"
+# Override database URL for tests
+settings.DATABASE_URL = settings.TEST_DATABASE_URL
 
 from backend.database import Base, engine
 from backend.main import app

@@ -7,6 +7,7 @@ from backend.schemas.recommendation import RecommendationCreate
 from backend.services.rag_service import get_relevant_chunks
 from fastapi import APIRouter, HTTPException
 from backend.database import SessionLocal
+from backend.config import settings
 
 ticket_router = APIRouter()
 
@@ -99,7 +100,7 @@ async def analyze_ticket(tid: int):
             priority=recommendation_payload.priority,
             summary=recommendation_payload.summary,
             recommended_step=recommendation_payload.recommended_step,
-            model_name=llm_service.MODEL_CHOICE
+            model_name=settings.GEMINI_MODEL if llm_service.api_key_present() else settings.OLLAMA_MODEL
         )
 
         db_session.add(recommendation_entry)

@@ -1,16 +1,14 @@
-from backend.paths import VECTOR_DB_FILE, KNOWLEDGE_BASE_DIR
+from backend.config import settings
 from backend.models.ticket import Ticket
 from chromadb import Collection, PersistentClient
 from pathlib import Path
 
-NUM_RELEVANT_CHUNKS = 3
-
-chroma_client = PersistentClient(path=VECTOR_DB_FILE)
+chroma_client = PersistentClient(path=str(settings.VECTOR_DB_FILE))
 collection = chroma_client.get_or_create_collection(name="knowledge_base")
 
 def load_documents() -> list:
     documents = []
-    p = Path(KNOWLEDGE_BASE_DIR)
+    p = Path(settings.KNOWLEDGE_BASE_DIR)
 
     for file in p.iterdir():
         if not file.is_file():
@@ -66,7 +64,7 @@ def ingest_knowledge_base():
 def get_relevant_chunks(ticket: Ticket) -> list:
     results = collection.query(
         query_texts=[str(ticket.text)],
-        n_results=NUM_RELEVANT_CHUNKS
+        n_results=settings.NUM_RELEVANT_CHUNKS
     )
     relevant_chunks = results["documents"]
 
