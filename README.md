@@ -1,29 +1,52 @@
 # HelpdeskPilot AI
 
-## An AI-powered internal IT support assistant that classifies requests, retrieves knowledge with RAG, and suggests next actions
+An AI-powered IT support assistant.
+This project automates ticket classification and provides smart recommendations using a RAG pipeline.
 
-A work in progress!
+### Key Features
+
+- Smart Ticketing: Automatically categorizes and prioritizes incoming IT requests.
+- AI Recommendations: Generates suggested next steps for technicians using the Gemini API.
+- Knowledge Base Search: Uses RAG to find relevant documentation from internal guides.
+- Inventory Management: Tracks hardware assets and equipment checkouts.
 
 ### Tech Stack
 
-1. Backend: Python / FastAPI
-2. Database: SQLite
-3. RAG: ChromaDB
-4. LLM API: Google Gemini
-5. Frontend: React
-6. Testing: pytest
+- Backend: Python, FastAPI, SQLAlchemy (SQLite)
+- Frontend: React, Vite
+- AI/ML: Google Gemini API, ChromaDB (Vector Store), Ollama (Local fallback)
+- Testing: Pytest
 
-7. Deployment: Docker
-8. CI/CD: GitHub Actions
+### How It Works
 
-### User Stories
+1.  Ingestion: Documentation is chunked and stored in a ChromaDB vector database.
+2.  Classification: When a ticket is submitted, it is first processed by a rule-based classifier.
+3.  Retrieval: The system searches the vector DB for snippets relevant to the ticket text.
+4.  Augmentation: The ticket and relevant documentation are sent to the LLM.
+5.  Output: The AI returns a refined category, priority, and a recommended action for the technician.
 
-1. As a user, I can submit an IT support request so that the Helpdesk has the issue in a structured system.
+### Getting Started
 
-2. As a technician, I can view tickets with category, priority, and suggested next steps so I can respond faster.
+#### Prerequisites
+- Python 3.10+
+- Node.js & npm
+- Gemini API Key (Optional: Ollama installed and running)
 
-3. As a technician, I can search our internal knowledge base so I can solve issues consistently.
+#### Backend Setup
+```bash
+echo GEMINI_API_KEY=your_key_here > .env
+pip install -r requirements.txt
+fastapi dev #starts at http://localhost:8000
+```
 
-4. As a technician, I can check out and check in equipment.
+#### Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev #starts at http://localhost:5173
+```
 
-5. As a developer, I can evaluate the AI classification system against known examples.
+### Testing
+```bash
+pytest backend/tests
+```
