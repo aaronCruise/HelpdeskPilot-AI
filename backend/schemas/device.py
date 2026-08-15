@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, field_validator
 
-from app.models.device import STATES
+from backend.models.device import STATES
 
 
 class DeviceCreate(BaseModel):

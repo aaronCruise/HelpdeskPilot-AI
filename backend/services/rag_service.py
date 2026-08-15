@@ -1,5 +1,5 @@
-from app.paths import VECTOR_DB_FILE, KNOWLEDGE_BASE_DIR
-from app.models.ticket import Ticket
+from backend.paths import VECTOR_DB_FILE, KNOWLEDGE_BASE_DIR
+from backend.models.ticket import Ticket
 from chromadb import Collection, PersistentClient
 from pathlib import Path
 

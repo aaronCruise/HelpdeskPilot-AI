@@ -1,4 +1,4 @@
-from app.models.checkout import STATUSES
+from backend.models.checkout import STATUSES
 
 
 def create_test_checkout(client):

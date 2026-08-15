@@ -2,7 +2,7 @@
 from enum import Enum
 from sqlalchemy import Column, DateTime, Enum as SQLEnum, Integer, String
 from datetime import datetime
-from app.database import Base
+from backend.database import Base
 
 class CATEGORIES(str, Enum):
     GENERAL = 'general'

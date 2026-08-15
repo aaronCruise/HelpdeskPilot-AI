@@ -1,7 +1,7 @@
 # Define the checkout model
 from enum import Enum
 from sqlalchemy import Column, DateTime, Enum as SQLEnum, ForeignKey, String, Integer
-from app.database import Base
+from backend.database import Base
 
 class STATUSES(str, Enum):
     ACTIVE = 'active'

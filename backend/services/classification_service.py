@@ -5,7 +5,7 @@ This is the baseline, rule-based classification
 to compare against the AI classification.
 '''
 
-from app.models.ticket import CATEGORIES, PRIORITIES
+from backend.models.ticket import CATEGORIES, PRIORITIES
 
 CLASSIFICATION_RULES = {
     CATEGORIES.BILLING: {

@@ -3,7 +3,7 @@ from enum import Enum
 
 from sqlalchemy import Column, DateTime, Enum as SQLEnum, Integer, String
 
-from app.database import Base
+from backend.database import Base
 from datetime import datetime
 
 TYPES = ['computer', 'phone', 'tablet', 'accessory']

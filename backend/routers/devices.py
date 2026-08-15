@@ -1,7 +1,7 @@
-from app.schemas.device import DeviceCreate, DeviceRead, DeviceUpdate
-from app.models.device import Device
+from backend.schemas.device import DeviceCreate, DeviceRead, DeviceUpdate
+from backend.models.device import Device
 from fastapi import APIRouter, HTTPException
-from app.database import SessionLocal
+from backend.database import SessionLocal
 
 device_router = APIRouter()
 

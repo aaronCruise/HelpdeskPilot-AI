@@ -1,12 +1,12 @@
-from app.schemas.ticket import TicketCreate, TicketRead, TicketUpdate
-from app.models.ticket import Ticket
-from app.models.recommendation import Recommendation
-from app.services.classification_service import classify_ticket
-from app.services import llm_service
-from app.schemas.recommendation import RecommendationCreate
-from app.services.rag_service import get_relevant_chunks
+from backend.schemas.ticket import TicketCreate, TicketRead, TicketUpdate
+from backend.models.ticket import Ticket
+from backend.models.recommendation import Recommendation
+from backend.services.classification_service import classify_ticket
+from backend.services import llm_service
+from backend.schemas.recommendation import RecommendationCreate
+from backend.services.rag_service import get_relevant_chunks
 from fastapi import APIRouter, HTTPException
-from app.database import SessionLocal
+from backend.database import SessionLocal
 
 ticket_router = APIRouter()
 

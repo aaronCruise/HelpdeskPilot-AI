@@ -1,15 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import Base, engine
-from app.routers.tickets import ticket_router
-from app.routers.devices import device_router
-from app.routers.checkouts import checkout_router
-from app.services.rag_service import ingest_knowledge_base
+from backend.database import Base, engine
+from backend.routers.tickets import ticket_router
+from backend.routers.devices import device_router
+from backend.routers.checkouts import checkout_router
+from backend.services.rag_service import ingest_knowledge_base
 from dotenv import load_dotenv
-import app.models.ticket
-import app.models.device
-import app.models.checkout
-import app.models.recommendation
+import backend.models.ticket
+import backend.models.device
+import backend.models.checkout
+import backend.models.recommendation
 
 # Load LLM API key into environment
 load_dotenv()

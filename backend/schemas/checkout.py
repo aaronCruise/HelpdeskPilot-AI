@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, field_validator, model_validator
 
-from app.models.checkout import STATUSES
+from backend.models.checkout import STATUSES
 
 
 class CheckoutCreate(BaseModel):

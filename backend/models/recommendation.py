@@ -1,8 +1,8 @@
 # Define the AI Recommendation Model
 from sqlalchemy import Column, DateTime, Enum as SQLEnum, Integer, String, ForeignKey
 from datetime import datetime
-from app.database import Base
-from app.models.ticket import CATEGORIES, PRIORITIES
+from backend.database import Base
+from backend.models.ticket import CATEGORIES, PRIORITIES
 
 class Recommendation(Base):
     __tablename__ = 'recommendations'

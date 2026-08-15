@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, field_validator
-from app.models.ticket import CATEGORIES, PRIORITIES, STATUSES
+from backend.models.ticket import CATEGORIES, PRIORITIES, STATUSES
 
 class TicketCreate(BaseModel):
     requester_name: str

@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from app.models.ticket import CATEGORIES, PRIORITIES, STATUSES
+from backend.models.ticket import CATEGORIES, PRIORITIES, STATUSES
 
 
 def create_test_ticket(client, custom_text="This is a test ticket for the test_ticket suite."):
@@ -102,7 +102,7 @@ def test_nonexistent_ticket_patch(client):
 
 
 def test_llm_analyze_ticket_no_api_key(monkeypatch):
-    from app.services import llm_service
+    from backend.services import llm_service
 
     class DummyMessage:
         content = '{"category":"network","priority":"high","summary":"Test summary","recommended_step":"Check Wi-Fi settings"}'

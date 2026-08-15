@@ -1,8 +1,8 @@
 # Call LLM for AI recommendation
 import logging
 
-from app.models.ticket import Ticket, CATEGORIES, PRIORITIES
-from app.schemas.recommendation import RecommendationCreate
+from backend.models.ticket import Ticket, CATEGORIES, PRIORITIES
+from backend.schemas.recommendation import RecommendationCreate
 from google import genai
 from os import environ
 

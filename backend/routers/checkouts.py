@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
-from app.schemas.checkout import CheckoutCreate, CheckoutRead, CheckoutUpdate, CheckIn
-from app.models.checkout import Checkout, STATUSES
-from app.models.device import Device, STATES
+from backend.schemas.checkout import CheckoutCreate, CheckoutRead, CheckoutUpdate, CheckIn
+from backend.models.checkout import Checkout, STATUSES
+from backend.models.device import Device, STATES
 from fastapi import APIRouter, HTTPException
-from app.database import SessionLocal
+from backend.database import SessionLocal
 
 checkout_router = APIRouter()
 

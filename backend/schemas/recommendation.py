@@ -1,5 +1,5 @@
 from pydantic import BaseModel, field_validator
-from app.models.ticket import CATEGORIES, PRIORITIES
+from backend.models.ticket import CATEGORIES, PRIORITIES
 
 class RecommendationCreate(BaseModel):
     category: CATEGORIES
