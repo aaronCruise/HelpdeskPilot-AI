@@ -7,8 +7,9 @@
 venv/
 .env
 
-# SQLite
+# SQLite (and ChromaDB)
 *.db
+*knowledge_base.db
 
 # React
 frontend/node_modules/
