@@ -30,16 +30,25 @@ This project automates ticket classification and provides smart recommendations 
 #### Prerequisites
 - Python 3.10+
 - Node.js & npm
-- Gemini API Key (Optional: Ollama installed and running)
+- Gemini API Key
+- [Ollama](https://ollama.com/) installed and running at default port (11434)
 
-#### Backend Setup
+#### Running with Docker
+```bash
+docker-compose up --build
+```
+The app will be available at http://localhost:5173
+
+#### Local Setup
+
+##### Backend
 ```bash
 echo GEMINI_API_KEY=your_key_here > .env
 pip install -r requirements.txt
 uvicorn backend.main:app --reload #starts at http://localhost:8000
 ```
 
-#### Frontend Setup
+##### Frontend
 ```bash
 cd frontend
 npm install
