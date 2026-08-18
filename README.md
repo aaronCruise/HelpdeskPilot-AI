@@ -36,7 +36,7 @@ This project automates ticket classification and provides smart recommendations 
 ```bash
 echo GEMINI_API_KEY=your_key_here > .env
 pip install -r requirements.txt
-fastapi dev #starts at http://localhost:8000
+uvicorn backend.main:app --reload #starts at http://localhost:8000
 ```
 
 #### Frontend Setup
