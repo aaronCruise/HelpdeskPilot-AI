@@ -16,9 +16,9 @@ if not logger.handlers:
 logger.setLevel(logging.DEBUG)
 
 try:
-    from ollama import chat
+    from ollama import Client
 except ImportError:
-    chat = None
+    Client = None
 
 
 SYSTEM_INSTRUCTIONS = (
@@ -78,9 +78,10 @@ def llm_analyze_ticket_with_api_key(ticket: Ticket, relevant_chunks: list) -> Re
     return RecommendationCreate.model_validate_json(response_text)
 
 def llm_analyze_ticket_no_api_key(ticket: Ticket, relevant_chunks: list) -> RecommendationCreate:
-    if chat is None:
+    if Client is None:
         raise ImportError("Ollama is not installed.")
 
+    client = Client(host=settings.OLLAMA_HOST)
     model_name = settings.OLLAMA_MODEL
     prompt = (
         f"Ticket text: {ticket.text}\n"
@@ -92,7 +93,7 @@ def llm_analyze_ticket_no_api_key(ticket: Ticket, relevant_chunks: list) -> Reco
     logger.info("LLM selected model: %s", model_name)
     logger.debug("LLM prompt: %s", prompt)
 
-    response = chat(
+    response = client.chat(
         model=model_name,
         messages=[
             {"role": "system", "content": SYSTEM_INSTRUCTIONS},
@@ -102,19 +103,3 @@ def llm_analyze_ticket_no_api_key(ticket: Ticket, relevant_chunks: list) -> Reco
     )
 
     return RecommendationCreate.model_validate_json(response.message.content)
-"""
-
-    if hasattr(response, "message") and hasattr(response.message, "content"):
-        response_text = response.message.content
-    elif isinstance(response, dict):
-        response_text = response.get("message", {}).get("content", "")
-    else:
-        response_text = str(response)
-
-    logger.debug("LLM output: %s", response_text)
-
-    if not response_text:
-        raise ValueError("The model returned an empty response.")
-
-    return RecommendationCreate.model_validate_json(response_text)
-    """

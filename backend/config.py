@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: Optional[str] = None
     GEMINI_MODEL: str = "gemini-3.6-flash"
     OLLAMA_MODEL: str = "llama3.2:1b"
+    OLLAMA_HOST: str = "http://localhost:11434"
 
     # RAG Settings
     NUM_RELEVANT_CHUNKS: int = 3
