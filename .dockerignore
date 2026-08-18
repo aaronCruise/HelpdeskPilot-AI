@@ -18,3 +18,12 @@ __pycache__/
 **/Dockerfile*
 **/node_modules
 README.md
+
+node_modules/
+dist/
+.git
+.gitignore
+.DS_Store
+npm-debug.log*
+coverage/
+db/
