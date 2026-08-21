@@ -24,7 +24,8 @@ except ImportError:
 SYSTEM_INSTRUCTIONS = (
     "You are a senior IT helpdesk technician. "
     "Classify the ticket, improve or override the initial guess if needed, "
-    "write a one-sentence summary, and recommend the next step. "
+    "write a one-sentence summary, and recommend the next step, which should contain "
+    "the specifics from the relevant chunks if applicable."
     f"Category must be one of: {', '.join(c.value for c in CATEGORIES)}. "
     f"Priority must be one of: {', '.join(p.value for p in PRIORITIES)}. "
     "Return valid JSON matching this schema: "

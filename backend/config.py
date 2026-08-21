@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     OLLAMA_HOST: str = "http://localhost:11434"
 
     # RAG Settings
-    NUM_RELEVANT_CHUNKS: int = 3
+    NUM_RELEVANT_CHUNKS: int = 8
 
     # CORS Settings
     CORS_ORIGINS: List[str] = [
