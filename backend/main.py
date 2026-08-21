@@ -4,7 +4,6 @@ from backend.database import Base, engine
 from backend.routers.tickets import ticket_router
 from backend.routers.devices import device_router
 from backend.routers.checkouts import checkout_router
-from backend.services.rag_service import ingest_knowledge_base
 from backend.config import settings
 import backend.models.ticket
 import backend.models.device
@@ -13,9 +12,6 @@ import backend.models.recommendation
 
 # Create database & tables
 Base.metadata.create_all(bind=engine)
-
-# Create RAG database
-ingest_knowledge_base()
 
 # Start web server
 app = FastAPI()

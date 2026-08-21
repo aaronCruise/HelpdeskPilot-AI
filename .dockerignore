@@ -27,3 +27,4 @@ dist/
 npm-debug.log*
 coverage/
 db/
+tests/

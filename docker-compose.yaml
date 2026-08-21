@@ -7,8 +7,8 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       - OLLAMA_HOST=http://host.docker.internal:11434
-    #env_file:
-     # - .env
+    env_file:
+      - .env
     ports:
       - "8000:8000"
 
