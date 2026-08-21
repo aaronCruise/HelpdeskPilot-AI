@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # CORS Settings
     CORS_ORIGINS: List[str] = [
         "http://localhost:5173",
-        "https://helpdesk-pilot-ai.vercel.app/"
+        "https://helpdesk-pilot-ai.vercel.app"
     ]
 
     model_config = SettingsConfigDict(
