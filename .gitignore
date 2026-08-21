@@ -5,7 +5,7 @@
 *.pyc
 .venv/
 venv/
-.env
+*.env
 
 # SQLite (and ChromaDB)
 *.db

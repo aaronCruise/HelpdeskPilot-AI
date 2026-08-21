@@ -1,6 +1,5 @@
- // Switch if necessary. No '/' at the end of URL.
-// const API_BASE_URL = 'https://special-fortnight-g47q6jr9gvjw2p9pr-8000.app.github.dev';
-const API_BASE_URL = 'http://127.0.0.1:8000';
+ // Use environment variable for API base URL, falling back to local for development
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
 
 export const CHECKOUTS_URL = `${API_BASE_URL}/checkouts/`;
