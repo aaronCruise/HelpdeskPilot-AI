@@ -3,6 +3,14 @@
 An AI-powered IT support assistant.
 This project automates ticket classification and provides smart recommendations using a RAG pipeline.
 
+### Live Demo
+
+- **Frontend**: [https://hdpilot-frontend.vercel.app](https://hdpilot-frontend.vercel.app) (Vercel)
+- **Backend**: [https://hdpilot-backend.onrender.com](https://hdpilot-backend.onrender.com) (Render)
+- **API Docs**: [https://hdpilot-backend.onrender.com/docs](https://hdpilot-backend.onrender.com/docs)
+
+> **Note on Free Tier**: The backend is hosted on Render's free tier, which spins down after 15 minutes of inactivity. If the app feels slow or fails on the first request, please wait 30-60 seconds for the backend to wake up.
+
 ### Key Features
 
 - Smart Ticketing: Automatically categorizes and prioritizes incoming IT requests.
