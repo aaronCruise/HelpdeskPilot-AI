@@ -1,69 +1,102 @@
 # HelpdeskPilot AI
 
-An AI-powered IT support assistant.
-This project automates ticket classification and provides smart recommendations using a RAG pipeline.
+An AI-powered IT support assistant. HelpdeskPilot AI helps technicians handle support tickets by automatically classifying issues and suggesting solutions using RAG.
 
-### Live Demo
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-- **Frontend**: [https://hdpilot-frontend.vercel.app](https://hdpilot-frontend.vercel.app) (Vercel)
-- **Backend**: [https://hdpilot-backend.onrender.com](https://hdpilot-backend.onrender.com) (Render)
-- **API Docs**: [https://hdpilot-backend.onrender.com/docs](https://hdpilot-backend.onrender.com/docs)
+---
 
-> **Note on Free Tier**: The backend is hosted on Render's free tier, which spins down after 15 minutes of inactivity. If the app feels slow or fails on the first request, please wait 30-60 seconds for the backend to wake up.
+## Live Demo & Documentation
 
-### Key Features
+*   **Frontend**: [helpdesk-pilot-ai.vercel.app](https://helpdesk-pilot-ai.vercel.app/)
+*   **API Documentation**: [hdpilot-backend.onrender.com/docs](https://hdpilot-backend.onrender.com/docs)
 
-- Smart Ticketing: Automatically categorizes and prioritizes incoming IT requests.
-- AI Recommendations: Generates suggested next steps for technicians using the Gemini API.
-- Knowledge Base Search: Uses RAG to find relevant documentation from internal guides.
-- Inventory Management: Tracks hardware assets and equipment checkouts.
+> **Note**: The backend is hosted on a free tier. If the requests from the frontend don't load immediately, please give it 30 to 60 seconds to wake up!
 
-### Tech Stack
+---
 
-- Backend: Python, FastAPI, SQLAlchemy (SQLite)
-- Frontend: React, Vite
-- AI/ML: Google Gemini API, ChromaDB (Vector Store), Ollama (Local fallback)
-- Testing: Pytest
+## Showcase
 
-### How It Works
+### Dashboard
+![Main Dashboard Placeholder](docs/screenshots/dashboard.png)
 
-1.  Ingestion: Documentation is chunked and stored in a ChromaDB vector database.
-2.  Classification: When a ticket is submitted, it is first processed by a rule-based classifier.
-3.  Retrieval: The system searches the vector DB for snippets relevant to the ticket text.
-4.  Augmentation: The ticket and relevant documentation are sent to the LLM.
-5.  Output: The AI returns a refined category, priority, and a recommended action for the technician.
+### Smart Analysis
+![AI Analysis GIF Placeholder](docs/screenshots/analyze-ticket.gif)
 
-### Getting Started
+---
 
-#### Prerequisites
-- Python 3.10+
-- Node.js & npm
-- Gemini API Key
-- [Ollama](https://ollama.com/) installed and running at default port (11434)
+## Key Features
 
-#### Running with Docker
+*   **AI Ticket Classification**: Every incoming ticket is automatically categorized and prioritized.
+*   **Smart Recommendations**: One click analyzes a ticket and suggests a solution using the Gemini API.
+*   **RAG (Retrieval-Augmented Generation)**: The LLM searches your internal docs to find the right answer.
+*   **Equipment Tracking**: Manage hardware inventory and track who has what checked out.
+*   **Local-First Development**: Works with Ollama so you can test AI features without an API key.
+
+---
+
+## Architecture
+
+*   **Frontend**: A responsive React app built with Vite.
+*   **Backend**: A FastAPI server that handles logic and data.
+*   **Data Store**: SQLite for tickets and inventory, plus ChromaDB for searching documentation.
+*   **AI Engine**: Uses Google Gemini 1.5 Flash (or Ollama locally) to generate summaries and fixes.
+
+### The Data Flow
+1.  **Ingestion**: Internal guides are chunked and stored in a vector database.
+2.  **Match**: When you analyze a ticket, the system finds the most relevant guide snippets.
+3.  **Synthesis**: The ticket + snippets are sent to the LLM.
+4.  **Result**: You get a precise recommendation based on actual company docs.
+
+---
+
+## Tech Stack
+
+*   **Core**: Python, FastAPI, React
+*   **AI**: Gemini API, ChromaDB, Ollama
+*   **Database**: SQLAlchemy, SQLite
+*   **Testing**: Pytest
+*   **DevOps**: Docker, Nginx, Render, Vercel
+
+---
+
+## Getting Started
+
+### 1. Prerequisites
+*   Python 3.10+ and Node.js
+*   (Optional) Gemini API Key in a `.env` file
+*   (Optional) [Ollama](https://ollama.com/) running locally
+
+### 2. Setup & Run
+
+#### The Quick Way (Docker)
+This runs the full stack (Frontend on port 5173, Backend on port 8000):
 ```bash
 docker-compose up --build
 ```
-The app will be available at http://localhost:5173
 
-#### Local Setup
-
-##### Backend
+#### The Manual Way
+**Backend:**
 ```bash
-echo GEMINI_API_KEY=your_key_here > .env
-pip install -r requirements.txt
-uvicorn backend.main:app --reload #starts at http://localhost:8000
+cd backend
+pip install -r ../requirements.txt
+uvicorn main:app --reload
 ```
 
-##### Frontend
+**Frontend:**
 ```bash
 cd frontend
 npm install
-npm run dev #starts at http://localhost:5173
+npm run dev
 ```
 
-### Testing
+---
+
+## Testing
+Run the test suite to verify the logic:
 ```bash
 pytest backend/tests
 ```
