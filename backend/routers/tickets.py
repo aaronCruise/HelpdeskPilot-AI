@@ -5,9 +5,10 @@ from backend.services.classification_service import classify_ticket
 from backend.services import llm_service
 from backend.schemas.recommendation import RecommendationCreate
 from backend.services.rag_service import get_relevant_chunks
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from backend.database import SessionLocal
 from backend.config import settings
+from backend.limiter import limiter
 
 ticket_router = APIRouter()
 
@@ -80,7 +81,8 @@ async def patch_ticket(tid: int, updates: TicketUpdate):
     return requested_ticket
 
 @ticket_router.post("/tickets/{tid}/analyze", response_model=RecommendationCreate)
-async def analyze_ticket(tid: int):
+@limiter.limit("5/minute")
+async def analyze_ticket(request: Request, tid: int):
     try:
         db_session = SessionLocal()
         requested_ticket = db_session.get(Ticket, tid)

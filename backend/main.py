@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from backend.database import Base, engine
+from backend.limiter import limiter
 from backend.routers.tickets import ticket_router
 from backend.routers.devices import device_router
 from backend.routers.checkouts import checkout_router
@@ -15,6 +19,11 @@ Base.metadata.create_all(bind=engine)
 
 # Start web server
 app = FastAPI()
+
+# Configure rate limiting (protects the LLM-backed /analyze endpoint from abuse)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
 
 # Configure CORS
 app.add_middleware(

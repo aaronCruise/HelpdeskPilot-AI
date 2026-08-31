@@ -2,6 +2,9 @@ from datetime import datetime
 from pydantic import BaseModel, field_validator
 from backend.models.ticket import CATEGORIES, PRIORITIES, STATUSES
 
+# Keeps a single ticket's text from turning into an oversized LLM prompt
+MAX_TICKET_TEXT_LENGTH = 2000
+
 class TicketCreate(BaseModel):
     requester_name: str
     requester_email: str
@@ -25,6 +28,8 @@ class TicketCreate(BaseModel):
     def validate_text(cls, text):
         if not text:
             raise ValueError('Request text must be populated.')
+        if len(text) > MAX_TICKET_TEXT_LENGTH:
+            raise ValueError(f'Request text must be {MAX_TICKET_TEXT_LENGTH} characters or fewer.')
         return text
     
 
