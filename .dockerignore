@@ -9,6 +9,7 @@ __pycache__/
 .github/
 .idea/
 .env
+.claude/
 
 **/.DS_Store
 **/__pycache__

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getTickets } from './api/tickets.js';
 import { getDevices } from './api/devices.js';
 import { getActiveCheckouts } from './api/checkouts.js';
+import { Home } from './pages/Home.jsx';
 import { TicketDashboard } from './pages/Tickets.jsx';
 import { DeviceDashboard } from './pages/Devices.jsx';
 import { CheckoutDashboard } from './pages/Checkouts.jsx';
@@ -59,7 +60,7 @@ const DASHBOARDS = {
 };
 
 export default function App() {
-  const [page, setPage] = useState('dashboard');
+  const [page, setPage] = useState('home');
   const PageComponent = DASHBOARDS[page];
 
   return (
@@ -67,6 +68,7 @@ export default function App() {
       <div className="app-container">
         <aside className="sidebar">
           <nav>
+            <button className={page === 'home' ? 'active' : ''} onClick={() => setPage('home')}>Home</button>
             <button className={page === 'dashboard' ? 'active' : ''} onClick={() => setPage('dashboard')}>Dashboard</button>
             <button className={page === 'tickets' ? 'active' : ''} onClick={() => setPage('tickets')}>Tickets</button>
             <button className={page === 'devices' ? 'active' : ''} onClick={() => setPage('devices')}>Devices</button>
@@ -74,7 +76,7 @@ export default function App() {
           </nav>
         </aside>
         <main className="main-content">
-          <PageComponent />
+          {page === 'home' ? <Home onEnter={() => setPage('dashboard')} /> : <PageComponent />}
         </main>
       </div>
     </>
