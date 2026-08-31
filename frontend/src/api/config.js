@@ -7,4 +7,3 @@ export const CHECKOUT_URL = `${API_BASE_URL}/checkout/`;
 export const CHECKIN_URL = `${API_BASE_URL}/checkin`;
 export const DEVICES_URL = `${API_BASE_URL}/devices/`;
 export const TICKETS_URL = `${API_BASE_URL}/tickets/`;
-export const HEALTH_URL = `${API_BASE_URL}/health`;

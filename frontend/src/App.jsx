@@ -2,21 +2,11 @@ import { useState, useEffect } from 'react';
 import { getTickets } from './api/tickets.js';
 import { getDevices } from './api/devices.js';
 import { getActiveCheckouts } from './api/checkouts.js';
-import { pingHealth } from './api/health.js';
 import { Home } from './pages/Home.jsx';
 import { TicketDashboard } from './pages/Tickets.jsx';
 import { DeviceDashboard } from './pages/Devices.jsx';
 import { CheckoutDashboard } from './pages/Checkouts.jsx';
 import './App.css';
-
-function ColdStartBanner() {
-  return (
-    <div className="coldstart-banner">
-      <span className="coldstart-dot"></span>
-      Waking up the server — it's on a free tier, so the first request after inactivity can take up to a minute.
-    </div>
-  );
-}
 
 function Dashboard() {
   const [openTickets, setOpenTickets] = useState(0);
@@ -71,29 +61,10 @@ const DASHBOARDS = {
 
 export default function App() {
   const [page, setPage] = useState('home');
-  const [isWarm, setIsWarm] = useState(false);
   const PageComponent = DASHBOARDS[page];
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function warmUp() {
-      while (!cancelled) {
-        if (await pingHealth()) {
-          if (!cancelled) setIsWarm(true);
-          return;
-        }
-        await new Promise(resolve => setTimeout(resolve, 3000));
-      }
-    }
-
-    warmUp();
-    return () => { cancelled = true; };
-  }, []);
 
   return (
     <>
-      {!isWarm && <ColdStartBanner />}
       <div className="app-container">
         <aside className="sidebar">
           <nav>

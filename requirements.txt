@@ -13,3 +13,6 @@ ollama==0.6.2
 # Configuration & Utilities
 pydantic-settings==2.14.2
 python-dotenv==1.2.2
+
+# Rate Limiting
+slowapi==0.1.10
