@@ -5,6 +5,33 @@
   background-color: var(--ctp-base);
 }
 
+/* Cold-start notice */
+.coldstart-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: var(--ctp-surface0);
+  color: var(--ctp-subtext1);
+  border-bottom: 1px solid var(--ctp-surface1);
+  padding: 0.6rem 1.25rem;
+  font-size: 0.85rem;
+}
+
+.coldstart-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--ctp-yellow);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: coldstart-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes coldstart-pulse {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  70% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.5; }
+}
+
 .sidebar {
   width: 240px;
   background-color: var(--ctp-mantle);
@@ -218,4 +245,11 @@ h2 {
   border: 1px solid rgba(237, 135, 150, 0.2);
   margin: 1rem 0;
   font-size: 0.9rem;
+}
+
+.hint-message {
+  color: var(--ctp-subtext0);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 0.5rem 0 0;
 }

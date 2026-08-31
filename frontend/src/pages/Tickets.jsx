@@ -164,6 +164,7 @@ function UpdateTicketForm({ onUpdate, result, error }) {
 
 function CreateTicketForm({ onTicketCreated }) {
     const [createError, setCreateError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -179,15 +180,19 @@ function CreateTicketForm({ onTicketCreated }) {
         }
 
         setCreateError('');
-        const result = await createTicket(name, email, ticket_text);
-        if (result?.detail) {
-            setCreateError(result.detail);
-            return;
-        }
+        setIsSubmitting(true);
+        try {
+            const result = await createTicket(name, email, ticket_text);
+            if (result?.detail) {
+                setCreateError(result.detail);
+                return;
+            }
 
-        setCreateError('');
-        await onTicketCreated();
-        form.reset();
+            await onTicketCreated();
+            form.reset();
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -208,7 +213,8 @@ function CreateTicketForm({ onTicketCreated }) {
                 </div>
                 {createError && <p className="error-message">{createError}</p>}
                 <div>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value={isSubmitting ? 'Submitting…' : 'Submit'} disabled={isSubmitting} />
+                    {isSubmitting && <p className="hint-message">This may take up to a minute if the server was inactive.</p>}
                 </div>
             </form>
         </>
